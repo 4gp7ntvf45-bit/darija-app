@@ -1,0 +1,2323 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>For Kaoutar — learn Moroccan Arabic vocabulary</title>
+<style>
+  @font-face {
+    font-family: 'Noto Naskh Arabic';
+    src: local('Noto Naskh Arabic'), local('Geeza Pro'), local('Damascus');
+  }
+
+  :root{
+    --sand: #F4EDE2;
+    --sand-deep: #ECE1D1;
+    --ink: #2B2118;
+    --ink-soft: #6B5D4F;
+    --terracotta: #B85C3E;
+    --terracotta-deep: #8F4530;
+    --terracotta-pale: #F0DCD0;
+    --teal: #2B6157;
+    --teal-pale: #DCE9E4;
+    --clay-card: #FFFCF7;
+    --gold: #C9912E;
+    --gold-pale: #F5E6C8;
+    --rose: #B23A4E;
+    --rose-pale: #F4DDE0;
+    --line: rgba(43,33,24,0.12);
+    --line-soft: rgba(43,33,24,0.07);
+    --shadow-card: 0 1px 2px rgba(43,33,24,0.04), 0 8px 24px -8px rgba(43,33,24,0.10);
+  }
+
+  *{box-sizing:border-box;}
+  body{
+    margin:0;
+    font-family:'Inter',system-ui,sans-serif;
+    background:var(--sand);
+    color:var(--ink);
+    min-height:100vh;
+  }
+
+  .app{
+    max-width:720px;
+    margin:0 auto;
+    padding:28px 20px 60px;
+  }
+
+  /* ---------- header ---------- */
+  .topbar{
+    display:flex;
+    align-items:baseline;
+    justify-content:space-between;
+    margin-bottom:22px;
+  }
+  .brand{
+    font-family:'Fraunces',serif;
+    font-size:26px;
+    font-weight:600;
+    letter-spacing:-0.01em;
+    display:flex;
+    align-items:baseline;
+    gap:10px;
+  }
+  .brand .ar{
+    font-family:'Noto Naskh Arabic','Geeza Pro','Damascus',serif;
+    font-size:22px;
+    color:var(--terracotta-deep);
+    font-weight:700;
+  }
+  .tagline{
+    font-size:13px;
+    color:var(--ink-soft);
+    margin-top:2px;
+  }
+  .icon-btn{
+    background:none;
+    border:none;
+    color:var(--ink-soft);
+    cursor:pointer;
+    font-size:20px;
+    padding:6px;
+    border-radius:8px;
+    line-height:1;
+  }
+  .icon-btn:hover{background:var(--sand-deep); color:var(--ink);}
+
+  /* ---------- stats strip ---------- */
+  .stats{
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    gap:10px;
+    margin-bottom:24px;
+  }
+  .stat{
+    background:var(--clay-card);
+    border:0.5px solid var(--line);
+    border-radius:14px;
+    padding:13px 14px;
+  }
+  .stat-num{
+    font-family:'Fraunces',serif;
+    font-size:24px;
+    font-weight:600;
+    line-height:1.1;
+  }
+  .stat-label{
+    font-size:11.5px;
+    color:var(--ink-soft);
+    margin-top:3px;
+    letter-spacing:0.01em;
+  }
+  .stat.due .stat-num{color:var(--terracotta-deep);}
+  .stat.learned .stat-num{color:var(--teal);}
+  .stat.streak .stat-num{color:var(--gold);}
+
+  /* ---------- mode switch ---------- */
+  .mode-row{
+    display:flex;
+    gap:8px;
+    margin-bottom:20px;
+  }
+  .mode-btn{
+    flex:1;
+    padding:10px 14px;
+    border-radius:12px;
+    border:0.5px solid var(--line);
+    background:var(--clay-card);
+    color:var(--ink-soft);
+    font-size:13.5px;
+    font-weight:500;
+    cursor:pointer;
+    text-align:center;
+  }
+  .mode-btn.active{
+    background:var(--ink);
+    color:var(--sand);
+    border-color:var(--ink);
+  }
+
+  .cat-row{
+    margin-bottom:10px;
+  }
+  .cat-select-btn{
+    width:100%;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    padding:10px 14px;
+    border-radius:12px;
+    border:0.5px solid var(--line);
+    background:var(--clay-card);
+    color:var(--ink);
+    font-size:13.5px;
+    font-weight:500;
+    cursor:pointer;
+    font-family:'Inter',sans-serif;
+  }
+  .cat-chevron{color:var(--ink-soft); font-size:11px;}
+  .cat-grid{
+    display:flex;
+    flex-wrap:wrap;
+    gap:7px;
+    margin-bottom:18px;
+    padding:12px;
+    background:var(--sand-deep);
+    border-radius:12px;
+  }
+  .cat-pill{
+    padding:7px 12px;
+    border-radius:9px;
+    border:0.5px solid var(--line);
+    background:var(--clay-card);
+    color:var(--ink-soft);
+    font-size:12.5px;
+    cursor:pointer;
+    font-family:'Inter',sans-serif;
+  }
+  .cat-pill.active{
+    background:var(--terracotta);
+    color:#fff;
+    border-color:var(--terracotta);
+  }
+
+  .sentence-block{
+    margin-top:16px;
+    padding-top:14px;
+    border-top:0.5px dashed var(--line);
+    width:100%;
+    text-align:left;
+  }
+  .sentence-eyebrow{
+    font-size:11px;
+    color:var(--ink-soft);
+    margin-bottom:6px;
+    letter-spacing:0.03em;
+  }
+  .sentence-ar{
+    font-family:'Noto Naskh Arabic','Geeza Pro','Damascus',serif;
+    font-size:17px;
+    direction:rtl;
+    margin-bottom:3px;
+  }
+  .sentence-lat{
+    font-size:13px;
+    color:var(--ink-soft);
+    margin-bottom:5px;
+    font-style:italic;
+  }
+  .sentence-en{
+    font-size:13px;
+    color:var(--ink-soft);
+  }
+
+  /* ---------- translator mode ---------- */
+  .translate-panel{
+    display:flex;
+    flex-direction:column;
+    gap:14px;
+  }
+  .translate-input-row{
+    position:relative;
+  }
+  .translate-input{
+    width:100%;
+    padding:14px 16px;
+    border-radius:14px;
+    border:0.5px solid var(--line);
+    background:var(--clay-card);
+    font-size:16px;
+    font-family:'Inter',sans-serif;
+    color:var(--ink);
+    box-shadow:var(--shadow-card);
+  }
+  .translate-input:focus{
+    outline:none;
+    border-color:var(--terracotta);
+  }
+  .translate-results{
+    display:flex;
+    flex-direction:column;
+    gap:8px;
+  }
+  .translate-hint{
+    text-align:center;
+    color:var(--ink-soft);
+    font-size:13.5px;
+    padding:24px 12px;
+  }
+  .translate-row{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    gap:14px;
+    background:var(--clay-card);
+    border:0.5px solid var(--line);
+    border-radius:12px;
+    padding:13px 16px;
+  }
+  .translate-en{
+    font-family:'Fraunces',serif;
+    font-weight:600;
+    font-size:16px;
+    color:var(--ink);
+    flex:1;
+  }
+  .translate-darija{
+    text-align:right;
+    flex:1;
+  }
+  .translate-ar{
+    font-family:'Noto Naskh Arabic','Geeza Pro','Damascus',serif;
+    font-size:18px;
+    direction:rtl;
+  }
+  .translate-lat{
+    font-size:12.5px;
+    color:var(--ink-soft);
+    margin-top:2px;
+  }
+  .translate-section-label{
+    font-size:12px;
+    color:var(--ink-soft);
+    letter-spacing:0.03em;
+    margin-top:14px;
+    margin-bottom:-4px;
+    padding-left:2px;
+  }
+  .sentences-count{
+    font-size:12.5px;
+    color:var(--ink-soft);
+    text-align:center;
+  }
+  .sentence-search-card{
+    background:var(--clay-card);
+    border:0.5px solid var(--line);
+    border-radius:12px;
+    padding:14px 16px;
+    text-align:left;
+  }
+  .sentence-search-word{
+    font-size:11px;
+    color:var(--terracotta-deep);
+    font-weight:600;
+    letter-spacing:0.02em;
+    margin-bottom:6px;
+    text-transform:uppercase;
+  }
+  .sentence-search-ar{
+    font-family:'Noto Naskh Arabic','Geeza Pro','Damascus',serif;
+    font-size:17px;
+    direction:rtl;
+    margin-bottom:3px;
+  }
+  .sentence-search-lat{
+    font-size:13px;
+    color:var(--ink-soft);
+    font-style:italic;
+    margin-bottom:4px;
+  }
+  .sentence-search-en{
+    font-size:13px;
+    color:var(--ink-soft);
+  }
+
+  /* ---------- session intro / empty state ---------- */
+  .panel{
+    background:var(--clay-card);
+    border:0.5px solid var(--line);
+    border-radius:18px;
+    box-shadow:var(--shadow-card);
+    padding:40px 32px;
+    text-align:center;
+  }
+  .panel h2{
+    font-family:'Fraunces',serif;
+    font-weight:600;
+    font-size:21px;
+    margin:0 0 8px;
+  }
+  .panel p{
+    font-size:14px;
+    color:var(--ink-soft);
+    line-height:1.6;
+    margin:0 0 22px;
+    max-width:420px;
+    margin-left:auto;
+    margin-right:auto;
+  }
+  .big-btn{
+    background:var(--terracotta);
+    color:#fff;
+    border:none;
+    border-radius:14px;
+    padding:14px 28px;
+    font-size:15px;
+    font-weight:500;
+    cursor:pointer;
+    font-family:'Inter',sans-serif;
+  }
+  .big-btn:hover{background:var(--terracotta-deep);}
+  .big-btn:disabled{background:var(--line); color:var(--ink-soft); cursor:default;}
+
+  /* ---------- card ---------- */
+  .card-zone{
+    min-height:380px;
+    display:flex;
+    flex-direction:column;
+  }
+  .progress-row{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    margin-bottom:14px;
+    font-size:12.5px;
+    color:var(--ink-soft);
+  }
+  .progress-track{
+    flex:1;
+    height:5px;
+    background:var(--sand-deep);
+    border-radius:4px;
+    overflow:hidden;
+  }
+  .progress-fill{
+    height:100%;
+    background:var(--terracotta);
+    border-radius:4px;
+    transition:width 0.25s ease;
+  }
+  .dir-tag{
+    font-size:11px;
+    font-weight:500;
+    padding:3px 9px;
+    border-radius:7px;
+    background:var(--teal-pale);
+    color:var(--teal);
+    letter-spacing:0.02em;
+    white-space:nowrap;
+  }
+  .dir-tag.rev{background:var(--terracotta-pale); color:var(--terracotta-deep);}
+
+  .flashcard{
+    flex:1;
+    background:var(--clay-card);
+    border:0.5px solid var(--line);
+    border-radius:20px;
+    box-shadow:var(--shadow-card);
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    text-align:center;
+    padding:48px 28px;
+    cursor:pointer;
+    position:relative;
+    min-height:280px;
+  }
+  .flashcard:hover{border-color:var(--line-soft);}
+  .card-eyebrow{
+    font-size:12px;
+    color:var(--ink-soft);
+    margin-bottom:14px;
+    letter-spacing:0.03em;
+  }
+  .card-prompt{
+    font-family:'Fraunces',serif;
+    font-weight:600;
+    font-size:34px;
+    line-height:1.2;
+    color:var(--ink);
+  }
+  .card-prompt.arabic{
+    font-family:'Noto Naskh Arabic','Geeza Pro','Damascus',serif;
+    font-size:42px;
+    direction:rtl;
+  }
+  .tap-hint{
+    position:absolute;
+    bottom:20px;
+    font-size:12px;
+    color:var(--ink-soft);
+  }
+
+  .type-input-row{
+    display:flex;
+    gap:10px;
+    margin-top:16px;
+  }
+  .type-input{
+    flex:1;
+    padding:14px 16px;
+    border-radius:14px;
+    border:1.5px solid var(--line);
+    background:var(--clay-card);
+    font-size:16px;
+    font-family:'Inter',sans-serif;
+    color:var(--ink);
+  }
+  .type-input:focus{
+    outline:none;
+    border-color:var(--terracotta);
+  }
+  .type-input.correct{
+    border-color:var(--teal);
+    background:var(--teal-pale);
+  }
+  .type-input.wrong{
+    border-color:var(--rose);
+    background:var(--rose-pale);
+  }
+  .type-input-row .big-btn{
+    flex-shrink:0;
+    padding:14px 22px;
+  }
+  .type-feedback{
+    margin-top:18px;
+    padding-top:16px;
+    border-top:0.5px solid var(--line);
+    text-align:center;
+  }
+  .type-feedback-label{
+    font-size:13px;
+    font-weight:600;
+    margin-bottom:10px;
+    letter-spacing:0.02em;
+  }
+
+  .answer-block{
+    margin-top:20px;
+    padding-top:20px;
+    border-top:0.5px solid var(--line);
+    width:100%;
+  }
+  .answer-main{
+    font-family:'Fraunces',serif;
+    font-weight:600;
+    font-size:26px;
+    margin-bottom:6px;
+  }
+  .answer-main.arabic{
+    font-family:'Noto Naskh Arabic','Geeza Pro','Damascus',serif;
+    font-size:32px;
+    direction:rtl;
+  }
+  .answer-sub{
+    font-size:15px;
+    color:var(--ink-soft);
+    font-family:'Inter',sans-serif;
+  }
+
+  /* ---------- grading row ---------- */
+  .grade-row{
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    gap:8px;
+    margin-top:16px;
+  }
+  .grade-btn{
+    border:none;
+    border-radius:12px;
+    padding:13px 6px;
+    font-size:13px;
+    font-weight:500;
+    cursor:pointer;
+    font-family:'Inter',sans-serif;
+    color:#fff;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    gap:3px;
+  }
+  .grade-btn .interval{
+    font-size:10.5px;
+    opacity:0.85;
+    font-weight:400;
+  }
+  .grade-again{background:var(--rose);}
+  .grade-again:hover{background:#962f40;}
+  .grade-hard{background:var(--gold);}
+  .grade-hard:hover{background:#a8791f;}
+  .grade-good{background:var(--teal);}
+  .grade-good:hover{background:#1f4b43;}
+  .grade-easy{background:var(--terracotta);}
+  .grade-easy:hover{background:var(--terracotta-deep);}
+
+  /* ---------- quiz mode ---------- */
+  .quiz-options{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:10px;
+    margin-top:18px;
+  }
+  .quiz-opt{
+    background:var(--clay-card);
+    border:0.5px solid var(--line);
+    border-radius:12px;
+    padding:14px 12px;
+    font-size:15px;
+    cursor:pointer;
+    text-align:center;
+    font-family:'Inter',sans-serif;
+  }
+  .quiz-opt.arabic{font-family:'Noto Naskh Arabic','Geeza Pro','Damascus',serif; font-size:18px; direction:rtl;}
+  .quiz-opt:hover{border-color:var(--terracotta); background:var(--terracotta-pale);}
+  .quiz-opt.correct{background:var(--teal-pale); border-color:var(--teal); color:var(--teal);}
+  .quiz-opt.wrong{background:var(--rose-pale); border-color:var(--rose); color:var(--rose);}
+  .quiz-opt.disabled{pointer-events:none;}
+
+  /* ---------- footer controls ---------- */
+  .footer-row{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-top:18px;
+  }
+  .link-btn{
+    background:none;
+    border:none;
+    color:var(--ink-soft);
+    font-size:13px;
+    cursor:pointer;
+    text-decoration:underline;
+    font-family:'Inter',sans-serif;
+    padding:4px;
+  }
+  .link-btn:hover{color:var(--ink);}
+
+  /* ---------- settings panel ---------- */
+  .settings-overlay{
+    display:none;
+    position:fixed;
+    inset:0;
+    background:rgba(43,33,24,0.35);
+    align-items:flex-start;
+    justify-content:center;
+    padding-top:60px;
+    z-index:10;
+    overflow-y:auto;
+  }
+  .settings-overlay.open{display:flex;}
+  .settings-box{
+    background:var(--clay-card);
+    border-radius:16px;
+    padding:24px 26px;
+    width:min(420px, calc(100% - 40px));
+    box-shadow:var(--shadow-card);
+  }
+  .settings-box h3{
+    font-family:'Fraunces',serif;
+    font-size:18px;
+    margin:0 0 14px;
+  }
+  .settings-row{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    padding:10px 0;
+    border-bottom:0.5px solid var(--line-soft);
+    font-size:14px;
+  }
+  .settings-row:last-of-type{border-bottom:none;}
+
+  .numerals-legend-title{
+    font-size:13px;
+    font-weight:600;
+    color:var(--ink);
+    margin-top:18px;
+    margin-bottom:10px;
+  }
+  .numerals-legend{
+    display:flex;
+    flex-direction:column;
+    gap:10px;
+    margin-bottom:6px;
+  }
+  .numeral-row{
+    display:flex;
+    gap:12px;
+    align-items:flex-start;
+  }
+  .numeral-badge{
+    flex-shrink:0;
+    width:32px;
+    height:32px;
+    border-radius:9px;
+    background:var(--terracotta-pale);
+    color:var(--terracotta-deep);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-family:'Fraunces',serif;
+    font-weight:600;
+    font-size:14px;
+  }
+  .numeral-text{
+    flex:1;
+    padding-top:2px;
+  }
+  .numeral-desc{
+    font-size:12.5px;
+    color:var(--ink);
+    line-height:1.4;
+  }
+  .numeral-example{
+    font-size:11.5px;
+    color:var(--ink-soft);
+    font-style:italic;
+    margin-top:2px;
+  }
+
+  .danger-link{
+    color:var(--rose);
+    font-size:13px;
+    background:none;
+    border:none;
+    cursor:pointer;
+    margin-top:14px;
+    text-decoration:underline;
+    font-family:'Inter',sans-serif;
+  }
+
+  .export-row{
+    margin-top:18px;
+    padding-top:14px;
+    border-top:0.5px solid var(--line-soft);
+  }
+  .export-btn{
+    width:100%;
+    background:var(--teal);
+    color:#fff;
+    border:none;
+    border-radius:12px;
+    padding:12px 18px;
+    font-size:13.5px;
+    font-weight:500;
+    cursor:pointer;
+    font-family:'Inter',sans-serif;
+  }
+  .export-btn:hover{
+    background:#1f4b43;
+  }
+  .export-btn:disabled{
+    background:var(--line);
+    color:var(--ink-soft);
+    cursor:default;
+  }
+  .export-error{
+    margin-top:8px;
+    font-size:12px;
+    color:var(--rose);
+    text-align:center;
+  }
+  .export-hint{
+    margin-top:8px;
+    font-size:11.5px;
+    color:var(--ink-soft);
+    text-align:center;
+    line-height:1.4;
+  }
+
+  .app-wrap{position:relative;}
+
+  .brand{cursor:pointer;}
+
+  .cat-walk-stage{
+    position:fixed;
+    bottom:8%;
+    left:-120px;
+    z-index:60;
+    pointer-events:none;
+    transition: left 7.5s linear;
+  }
+  .cat-walk-stage.cat-walk-active{
+    left:calc(100% + 20px);
+  }
+  .cat-walk-stage #cat-walker{
+    animation: cat-bob 0.6s ease-in-out infinite;
+  }
+  @keyframes cat-bob{
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-1.5px); }
+  }
+  .cat-leg-back-left{
+    animation: cat-stride-a 0.6s ease-in-out infinite;
+  }
+  .cat-leg-front-right{
+    animation: cat-stride-a 0.6s ease-in-out infinite;
+  }
+  .cat-leg-back-right{
+    animation: cat-stride-b 0.6s ease-in-out infinite;
+  }
+  .cat-leg-front-left{
+    animation: cat-stride-b 0.6s ease-in-out infinite;
+  }
+  @keyframes cat-stride-a{
+    0%, 100% { transform: rotate(18deg); }
+    50% { transform: rotate(-18deg); }
+  }
+  @keyframes cat-stride-b{
+    0%, 100% { transform: rotate(-18deg); }
+    50% { transform: rotate(18deg); }
+  }
+  .cat-tail{
+    animation: cat-tail-sway 0.9s ease-in-out infinite;
+  }
+  @keyframes cat-tail-sway{
+    0%, 100% { transform: rotate(-6deg); }
+    50% { transform: rotate(6deg); }
+  }
+  .cat-speech-bubble{
+    position:absolute;
+    top:-30px;
+    left:50%;
+    transform:translateX(-50%);
+    background:#FFFCF7;
+    border:1.5px solid var(--ink);
+    border-radius:10px;
+    padding:4px 12px;
+    font-family:'Noto Naskh Arabic','Geeza Pro','Damascus',serif;
+    font-size:16px;
+    font-weight:700;
+    color:var(--ink);
+    white-space:nowrap;
+    opacity:0;
+    animation: cat-bubble-show 7.5s ease forwards;
+  }
+  .cat-speech-bubble::after{
+    content:'';
+    position:absolute;
+    bottom:-6px;
+    left:50%;
+    transform:translateX(-50%);
+    border-width:6px 5px 0 5px;
+    border-style:solid;
+    border-color:var(--ink) transparent transparent transparent;
+  }
+  @keyframes cat-bubble-show{
+    0%{ opacity:0; }
+    12%{ opacity:1; }
+    85%{ opacity:1; }
+    100%{ opacity:0; }
+  }
+
+  .bg-flowers{
+    position:absolute;
+    top:0;
+    left:0;
+    right:0;
+    height:100%;
+    overflow:hidden;
+    pointer-events:none;
+    z-index:0;
+    opacity:0.5;
+  }
+  .bg-flowers svg{
+    position:absolute;
+  }
+  .app{position:relative; z-index:1;}
+
+  .secret-btn-row{
+    margin-top:28px;
+    text-align:center;
+  }
+  .secret-btn{
+    background:none;
+    border:0.5px dashed var(--line);
+    color:var(--ink-soft);
+    font-size:12px;
+    padding:8px 16px;
+    border-radius:10px;
+    cursor:pointer;
+    font-family:'Inter',sans-serif;
+  }
+  .secret-btn:hover{
+    border-color:var(--rose);
+    color:var(--rose);
+  }
+
+  .missed-panel{
+    margin-top:14px;
+    background:var(--rose-pale);
+    border:0.5px solid rgba(178,58,78,0.25);
+    border-radius:14px;
+    padding:16px 20px;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:14px;
+    flex-wrap:wrap;
+  }
+  .missed-text{
+    font-size:13.5px;
+    color:var(--rose);
+    font-weight:500;
+  }
+  .missed-btn{
+    background:var(--rose);
+    color:#fff;
+    border:none;
+    border-radius:10px;
+    padding:10px 18px;
+    font-size:13px;
+    font-weight:500;
+    cursor:pointer;
+    font-family:'Inter',sans-serif;
+    white-space:nowrap;
+  }
+  .missed-btn:hover{
+    background:#962f40;
+  }
+
+  .secret-overlay{
+    position:fixed;
+    inset:0;
+    background:var(--sand);
+    z-index:50;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    overflow:hidden;
+  }
+  .secret-flowers{
+    position:absolute;
+    inset:0;
+    pointer-events:none;
+    z-index:0;
+  }
+  .secret-flowers svg{position:absolute;}
+  .secret-content{
+    position:relative;
+    z-index:1;
+    text-align:center;
+    padding:40px 24px;
+    max-width:560px;
+  }
+  .secret-message{
+    font-family:'Noto Naskh Arabic','Geeza Pro','Damascus',serif;
+    font-size:38px;
+    line-height:1.6;
+    color:var(--terracotta-deep);
+    direction:rtl;
+    font-weight:700;
+  }
+  .secret-close{
+    margin-top:36px;
+    background:var(--ink);
+    color:var(--sand);
+    border:none;
+    border-radius:14px;
+    padding:12px 26px;
+    font-size:14px;
+    cursor:pointer;
+    font-family:'Inter',sans-serif;
+  }
+
+  @media (max-width:600px){
+    .secret-message{font-size:26px;}
+  }
+
+  @media (max-width:600px){
+    .app{padding:18px 14px 50px;}
+    .topbar{margin-bottom:16px;}
+    .brand{font-size:22px;}
+    .brand .ar{font-size:19px;}
+    .tagline{font-size:12px;}
+    .stats{grid-template-columns:repeat(2,1fr); gap:8px;}
+    .stat{padding:11px 12px;}
+    .stat-num{font-size:20px;}
+    .card-prompt{font-size:26px;}
+    .card-prompt.arabic{font-size:32px;}
+    .answer-main{font-size:22px;}
+    .answer-main.arabic{font-size:28px;}
+    .panel{padding:24px 16px;}
+    .flashcard{padding:32px 18px; min-height:240px;}
+    .grade-row{gap:6px;}
+    .grade-btn{padding:14px 4px; font-size:12px; min-height:52px;}
+    .grade-btn .interval{font-size:9.5px;}
+    .quiz-options{grid-template-columns:1fr;}
+    .quiz-opt{padding:16px 14px; font-size:16px;}
+    .mode-btn{padding:12px 10px; font-size:13px;}
+    .big-btn{width:100%; padding:16px 24px;}
+    .cat-grid{max-height:260px; overflow-y:auto;}
+    .translate-row{flex-direction:column; align-items:flex-start; gap:8px;}
+    .translate-darija{text-align:left; width:100%;}
+    .settings-box{width:calc(100% - 24px); padding:20px;}
+  }
+
+  @media (max-width:480px){
+    .stats{grid-template-columns:repeat(2,1fr);}
+    .card-prompt{font-size:28px;}
+    .card-prompt.arabic{font-size:34px;}
+    .panel{padding:28px 20px;}
+  }
+</style>
+</head>
+<body>
+
+<div class="app-wrap">
+<div class="bg-flowers" id="bg-flowers"></div>
+<div class="app" id="app"></div>
+</div>
+
+<script>
+const FLOWER_SVGS = [
+`<svg width="92" height="92" viewBox="0 0 92 92"><g transform="translate(46,46)">
+<g fill="#B85C3E" opacity="0.85">
+<ellipse cx="0" cy="-22" rx="13" ry="17"/>
+<ellipse cx="19" cy="-9" rx="13" ry="17" transform="rotate(72 19 -9)"/>
+<ellipse cx="13" cy="18" rx="13" ry="17" transform="rotate(144 13 18)"/>
+<ellipse cx="-13" cy="18" rx="13" ry="17" transform="rotate(216 -13 18)"/>
+<ellipse cx="-19" cy="-9" rx="13" ry="17" transform="rotate(288 -19 -9)"/>
+</g>
+<circle cx="0" cy="0" r="9" fill="#C9912E"/>
+</g></svg>`,
+`<svg width="80" height="80" viewBox="0 0 80 80"><g transform="translate(40,40)">
+<g fill="#F0DCD0" opacity="0.9">
+<ellipse cx="0" cy="-18" rx="10" ry="14"/>
+<ellipse cx="15" cy="-7" rx="10" ry="14" transform="rotate(72 15 -7)"/>
+<ellipse cx="9" cy="14" rx="10" ry="14" transform="rotate(144 9 14)"/>
+<ellipse cx="-9" cy="14" rx="10" ry="14" transform="rotate(216 -9 14)"/>
+<ellipse cx="-15" cy="-7" rx="10" ry="14" transform="rotate(288 -15 -7)"/>
+</g>
+<circle cx="0" cy="0" r="6" fill="#B85C3E"/>
+</g></svg>`,
+`<svg width="70" height="70" viewBox="0 0 70 70"><g transform="translate(35,35)">
+<g fill="#B23A4E" opacity="0.8">
+<path d="M0,-20 C8,-20 12,-10 6,0 C12,4 12,14 0,20 C-12,14 -12,4 -6,0 C-12,-10 -8,-20 0,-20 Z"/>
+</g>
+<g fill="#8F4530" opacity="0.6" transform="rotate(60)">
+<path d="M0,-20 C8,-20 12,-10 6,0 C12,4 12,14 0,20 C-12,14 -12,4 -6,0 C-12,-10 -8,-20 0,-20 Z"/>
+</g>
+<g fill="#B23A4E" opacity="0.8" transform="rotate(120)">
+<path d="M0,-20 C8,-20 12,-10 6,0 C12,4 12,14 0,20 C-12,14 -12,4 -6,0 C-12,-10 -8,-20 0,-20 Z"/>
+</g>
+<circle cx="0" cy="0" r="5" fill="#C9912E"/>
+</g></svg>`,
+`<svg width="60" height="60" viewBox="0 0 60 60"><g transform="translate(30,30)">
+<g fill="#FFFCF7" opacity="0.95" stroke="#C9912E" stroke-width="0.5">
+<ellipse cx="0" cy="-14" rx="8" ry="11"/>
+<ellipse cx="12" cy="-5" rx="8" ry="11" transform="rotate(72 12 -5)"/>
+<ellipse cx="7" cy="11" rx="8" ry="11" transform="rotate(144 7 11)"/>
+<ellipse cx="-7" cy="11" rx="8" ry="11" transform="rotate(216 -7 11)"/>
+<ellipse cx="-12" cy="-5" rx="8" ry="11" transform="rotate(288 -12 -5)"/>
+</g>
+<circle cx="0" cy="0" r="5" fill="#C9912E"/>
+</g></svg>`
+];
+
+const HEART_SVG = `<svg width="28" height="28" viewBox="0 0 28 28">
+<path d="M14,24 C14,24 3,17 3,9.5 C3,5.5 6,3 9,3 C11.5,3 13.5,4.5 14,6.5 C14.5,4.5 16.5,3 19,3 C22,3 25,5.5 25,9.5 C25,17 14,24 14,24 Z" fill="#B23A4E" opacity="0.75"/>
+</svg>`;
+
+function renderBackgroundFlowers(){
+  const container = document.getElementById('bg-flowers');
+  if(!container) return;
+  const positions = [
+    {x:'2%', y:'4%', rot:-12, scale:1.0, idx:0},
+    {x:'88%', y:'2%', rot:18, scale:0.8, idx:1},
+    {x:'92%', y:'40%', rot:8, scale:0.7, idx:2},
+    {x:'1%', y:'55%', rot:-8, scale:0.9, idx:3},
+    {x:'85%', y:'78%', rot:-15, scale:1.0, idx:0},
+    {x:'3%', y:'88%', rot:20, scale:0.75, idx:2},
+  ];
+  container.innerHTML = positions.map(p => {
+    return `<div style="position:absolute; left:${p.x}; top:${p.y}; transform:rotate(${p.rot}deg) scale(${p.scale}); transform-origin:center;">${FLOWER_SVGS[p.idx]}</div>`;
+  }).join('');
+}
+renderBackgroundFlowers();
+
+function renderSecretFlowers(container){
+  if(!container) return;
+  const positions = [
+    {x:'1%', y:'2%', rot:-10, scale:1.1, idx:0},
+    {x:'85%', y:'1%', rot:15, scale:0.9, idx:1},
+    {x:'90%', y:'30%', rot:5, scale:0.8, idx:2},
+    {x:'2%', y:'35%', rot:-6, scale:1.0, idx:3},
+    {x:'80%', y:'60%', rot:-12, scale:1.0, idx:0},
+    {x:'4%', y:'70%', rot:18, scale:0.85, idx:2},
+    {x:'88%', y:'85%', rot:8, scale:0.95, idx:1},
+    {x:'6%', y:'92%', rot:-15, scale:0.8, idx:0},
+  ];
+  const hearts = [
+    {x:'14%', y:'12%', rot:-15, scale:0.9},
+    {x:'75%', y:'18%', rot:10, scale:1.1},
+    {x:'20%', y:'48%', rot:8, scale:0.7},
+    {x:'70%', y:'45%', rot:-12, scale:0.85},
+    {x:'30%', y:'78%', rot:15, scale:1.0},
+    {x:'60%', y:'82%', rot:-8, scale:0.75},
+    {x:'45%', y:'15%', rot:5, scale:0.65},
+    {x:'10%', y:'60%', rot:-20, scale:0.7},
+  ];
+  const flowerHtml = positions.map(p => {
+    return `<div style="position:absolute; left:${p.x}; top:${p.y}; transform:rotate(${p.rot}deg) scale(${p.scale}); transform-origin:center;">${FLOWER_SVGS[p.idx]}</div>`;
+  }).join('');
+  const heartHtml = hearts.map(h => {
+    return `<div style="position:absolute; left:${h.x}; top:${h.y}; transform:rotate(${h.rot}deg) scale(${h.scale}); transform-origin:center;">${HEART_SVG}</div>`;
+  }).join('');
+  container.innerHTML = flowerHtml + heartHtml;
+}
+</script>
+
+<script>
+function shuffleArray(arr){
+  const a = arr.slice();
+  for(let i = a.length - 1; i > 0; i--){
+    const j = Math.floor(Math.random() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+}
+
+function normalizeAnswer(s){
+  return s.toLowerCase()
+    .replace(/[\u064B-\u065F]/g, '')   // strip Arabic diacritics if any
+    .replace(/[^a-z0-9\u0600-\u06FF\s]/g, '') // strip punctuation, keep Arabic letters
+    .replace(/\s+/g, ' ')
+    .trim();
+}
+
+function answersMatch(typed, correctOptions){
+  const t = normalizeAnswer(typed);
+  if(!t) return false;
+  return correctOptions.some(opt => {
+    const c = normalizeAnswer(opt);
+    if(t === c) return true;
+    // tolerate trailing vowel variance common in informal Darija Latin spelling (e.g. bghit vs bghite)
+    // only for words long enough that a 1-character difference is a plausible typo, not a half-typed guess
+    const minLen = Math.min(t.length, c.length);
+    if(minLen >= 4 && Math.abs(t.length - c.length) <= 1 && (t.startsWith(c) || c.startsWith(t))) return true;
+    return false;
+  });
+}
+function sampleSize(arr, n){
+  return shuffleArray(arr).slice(0, n);
+}
+const WORDS_RAW = [["of","ديال","dyal","core","هادا الكتاب ديال خويا","hada lktab dyal khuya","This book is of my brother."],["and","و","w","core","بغيت قهوة و خبز","bghit qehwa w khobz","I want coffee and bread."],["a","واحد","wahed","core","عندي واحد الكتاب","3andi wahed lktab","I have a book."],["to","ل","l-","core","غادي ل السوق","ghadi l ssuq","I'm going to the market."],["in","فـ","f-","core","هو كاين ف الدار","huwa kayn f ddar","He is in the house."],["is","كاين / هو","kayn / huwa","core","هادا الطعام بنين","hada ttaam bnin","This food is delicious."],["you","نتا / نتي","nta / nti","core","نتا فين ساكن؟","nta fin saken?","Where do you live?"],["that","هاداك","hadak","core","هاداك الراجل صاحبي","hadak rrajel sa7bi","That man is my friend."],["it","هادشي","hadshi","core","هادشي ماشي مهم","hadshi machi muhim","It's not important."],["he","هو","huwa","core","هو كايخدم بزاف","huwa kaykhdem bzzaf","He works a lot."],["was","كان","kan","core","كان عيان البارح","kan 3yan lbare7","He was tired yesterday."],["for","ل","l-","core","هادا الهدية ليا؟","hada lhadiya liya?","Is this gift for me?"],["on","فوق","fuq","core","الكتاب فوق الطبلة","lktab fuq tabla","The book is on the table."],["are","كاينين","kaynin","core","هما كاينين فالدار","huma kaynin f ddar","They are in the house."],["as","بحال","b7al","core","نتا بحال خويا","nta b7al khuya","You are like my brother."],["with","مع","m3a","core","جيت مع صاحبي","jit m3a sa7bi","I came with my friend."],["his","ديالو","dyalu","core","هادا الكتاب ديالو","hada lktab dyalu","This book is his."],["they","هما","huma","core","هما طلبة فالجامعة","huma talaba f ljami3a","They are students at the university."],["I","أنا","ana","core","أنا فرحان اليوم","ana fer7an lyum","I am happy today."],["at","فـ / عند","3nd","core","نتلاقاو عند الباب","ntlaqaw 3nd lbab","We'll meet at the door."],["be","كون","kun","core","بغيت نكون طبيب","bghit nkun tbib","I want to be a doctor."],["this","هادا","hada","core","هادا الكتاب جديد","hada lktab jdid","This book is new."],["have","عندي","3andi","core","عندي درّي صغير","3andi drri sghir","I have a small child."],["from","من","men","core","جيت من المغرب","jit men lmaghrib","I came from Morocco."],["or","ولا","wla","core","بغيت أتاي ولا قهوة","bghit atay wla qehwa","I want tea or coffee."],["one","واحد","wahed","core","عندي واحد الصاحب مزيان","3andi wahed sa7eb mzyan","I have one good friend."],["had","كان عندو","kan 3andu","core","كان عندو سيارة جديدة","kan 3andu sayara jdida","He had a new car."],["by","من طرف","men taraf","core","الكتاب تكتب من طرف أستاذ","lktab ketbu men taraf ustad","The book was written by a teacher."],["word","كلمة","kelma","core","هادا الكلمة صعيبة","hada lkelma s3iba","This word is difficult."],["but","ولكن / غير","walakin / ghir","core","بغيتها ولكن ما قدرتش","bghitha walakin ma qdertsh","I wanted it, but I couldn't."],["not","ماشي","machi","core","هادشي ماشي صحيح","hadshi machi sa7i7","This is not correct."],["what","أشنو","ashnu","core","أشنو بغيتي تقول؟","ashnu bghiti tqul?","What do you want to say?"],["all","كلشي","kolshi","core","كلشي مزيان دابا","kolshi mzyan daba","Everything is fine now."],["were","كانوا","kanu","core","كانوا فرحانين بزاف","kanu fer7anin bzzaf","They were very happy."],["we","حنا","7na","core","حنا غادين ل السوق","7na ghadin l ssuq","We are going to the market."],["when","فوقاش / إمتى","fuqash / imta","core","فوقاش غادي تجي؟","fuqash ghadi tji?","When are you coming?"],["your","ديالك","dyalek","core","ديالك ولا ديالي؟","dyalek wla dyali?","Yours or mine?"],["can","تقدر","tqder","core","تقدر تعاوني شوية؟","tqder t3awni shwiya?","Can you help me a little?"],["said","قال","qal","core","قال ليا غادي يجي","qal liya ghadi yji","He said he would come."],["there","تما / هناك","tma / hnak","core","تما كاين بزاف ديال الناس","tma kayn bzzaf dyal nnas","There are a lot of people there."],["use","خدم / استعمل","khdem / sta3mel","core","خاصك تستعمل هاد الآلة","khassek tsta3mel had laala","You need to use this tool."],["an","واحد","wahed","core","بغيت واحد التفاحة","bghit wahed tef7a","I want an apple."],["each","كل واحد","kol wahed","core","كل واحد عندو رأيو","kol wahed 3andu ra'yu","Each person has their opinion."],["which","أشمن","ashmen","core","أشمن كتاب بغيتي؟","ashmen ktab bghiti?","Which book do you want?"],["she","هي","hiya","core","هي معلمة فالمدرسة","hiya m3llma f lmadrasa","She is a teacher at school."],["do","دير / عمل","dir / 3mel","core","أشنو غادي ندير اليوم؟","ashnu ghadi ndir lyum?","What am I going to do today?"],["how","كيفاش","kifash","core","كيفاش غادي نمشي ل تما؟","kifash ghadi nimshi l tma?","How am I going to get there?"],["their","ديالهم","dyalhom","core","ديالهم الدار كبيرة","dyalhom ddar kbira","Their house is big."],["if","إلا / إذا","ila / ida","core","إلا بغيتي نمشيو سوا","ila bghiti nimshiw swa","If you want, we can go together."],["will","غادي","ghadi","core","غادي نمشي للبيت دابا","ghadi nimshi l lbit daba","I will go home now."],["up","فوق","fuq","core","طلع فوق السلم","tla3 fuq sellam","He went up the ladder."],["other","آخر","akhor","core","بغيت كتاب آخر","bghit ktab akhor","I want another book."],["about","على","3la","core","بغيت نهضر على هادشي","bghit nhder 3la hadshi","I want to talk about this."],["out","برا","bra","core","خرج برا دابا","khrej bra daba","He went out now."],["many","بزاف","bzzaf","core","كاين بزاف ديال الخدمة","kayn bzzaf dyal lkhedma","There is a lot of work."],["then","من بعد","men b3d","core","ول بعدين رجع للدار","wlla men b3d rja3 ddar","Then he went back home."],["them","هم","hom","core","شفتهم البارح","shefthom lbare7","I saw them yesterday."],["these","هادو","hadu","core","هادو هما لكتب ديالي","hadu huma lktub dyali","These are my books."],["so","إذن","idan","core","إذن خاصنا نمشيو دابا","idan khassna nmshiw daba","So we need to go now."],["some","شي","chi","core","شي ناس بغاو يجيو","chi nas bghaw yjiw","Some people want to come."],["her","ديالها","dyalha","core","سلمت عليها لبارح","sllemt 3liha lbare7","I greeted her yesterday."],["would","كان غادي","kan ghadi","core","كان غادي يجي ولكن تأخر","kan ghadi yji walakin ta'akhar","He would come, but he was late."],["make","دير / صنع","dir / sna3","core","خاصنا ندير شي حاجة","khassna ndir chi haja","We need to make something."],["like","بحال","b7al","core","هادشي بحال البارح","hadshi b7al lbare7","This is like yesterday."],["him","ليه","lih","core","عطيتو ليه الفلوس","3titu lih lflus","I gave him the money."],["into","لداخل","l-dakhel","core","دخل لداخل الدار","dkhel l-dakhel ddar","He went inside the house."],["time","وقت","weqt","core","عندي وقت دابا","3andi weqt daba","I have time now."],["has","عندو","3andu","core","عندو بزاف ديال الصبر","3andu bzzaf dyal sber","He has a lot of patience."],["look","شوف","shuf","core","شوف هاد التصويرة","shuf had tsswira","Look at this picture."],["two","جوج","juj","core","عندي جوج كتب","3andi juj ktub","I have two books."],["more","كثر","kter","core","بغيت كثر ديال الوقت","bghit kter dyal lweqt","I want more time."],["write","كتب","ktb","core","كتب الإيمايل دابا","ktb limayl daba","He wrote the email now."],["go","سير / مشي","sir / mshi","core","سير ل السوق عافاك","sir l ssuq 3afak","Go to the market please."],["see","شوف","shuf","core","شوف هاد المنظر","shuf had lmandhar","Look at this view."],["number","نمرة / رقم","nomra / raqam","core","أشنو هو النمرة ديالك؟","ashnu huwa nnomra dyalek?","What is your number?"],["no","لا","la","core","لا، ما عنديش وقت","la, ma 3andish weqt","No, I don't have time."],["way","طريق","triq","core","هاد الطريق طويلة","had triq twila","This way is long."],["could","كان يقدر","kan yqder","core","كان يقدر يجي بكري","kan yqder yji bekri","He could come early."],["people","ناس","nas","core","كاين بزاف ديال الناس هنا","kayn bzzaf dyal nnas hna","There are a lot of people here."],["my","ديالي","dyali","core","ديالي الدار قريبة","dyali ddar qriba","My house is close."],["than","من","men","core","هو أكبر من خوه","huwa akbar men khuh","He is older than his brother."],["first","لول","lawel","core","هو لول واحد جا","huwa lawel wahed ja","He was the first one to arrive."],["water","ما","ma","core","بغيت كاس ديال الما","bghit kas dyal lma","I want a glass of water."],["been","كان","kan","core","كان فالدار قبل","kan f ddar qbel","He had been in the house before."],["call","عيط","3yyat","core","عيط ليا غدا","3yyat liya ghedda","Call me tomorrow."],["who","شكون","shkun","core","شكون هادا الراجل؟","shkun hada rrajel?","Who is this man?"],["oil","زيت","zit","core","بغيت زيت الزيتون","bghit zit zzitun","I want olive oil."],["its","ديالو","dyalu","core","الكلب ديالو زوين","lkelb dyalu zwin","Its dog is nice."],["now","دابا","daba","core","دابا خاصنا نمشيو","daba khassna nimshiw","Now we need to go."],["find","لقا","lqa","core","لقيت الكتاب ديالي","lqit lktab dyali","I found my book."],["long","طويل","twil","core","هاد الطريق طويل بزاف","had triq twil bzzaf","This road is very long."],["down","تحت / لتحت","tht / l-tht","core","هبط لتحت السلم","hbet l-tht sellam","He went down the stairs."],["day","نهار / يوم","nhar / nhar","core","اليوم نهار زوين","lyum nhar zwin","Today is a nice day."],["did","دار","dar","core","أشنو دار البارح؟","ashnu dar lbare7?","What did he do yesterday?"],["get","حصل / دير","h9el","core","حصلت على شهادة جديدة","h9elt 3la shahada jdida","I got a new certificate."],["come","جا","ja","core","جا عندي البارح","ja 3ndi lbare7","He came to my house yesterday."],["made","صنع / دار","sna3 / dar","core","صنع طاولة من الخشب","sna3 tabla men lkhshab","He made a table out of wood."],["may","يمكن","yemken","core","يمكن غادي يشتي غدا","yemken ghadi yshti ghedda","It might rain tomorrow."],["part","جزء / حتة","juz' / 7etta","core","هاد الجزء صعيب","had juz' s3ib","This part is difficult."],["over","فوق","fuq","core","الطيارة طارت فوق المدينة","ttyara taret fuq lmdina","The plane flew over the city."],["new","جديد","jdid","core","شريت قميجة جديدة","shrit qamija jdida","I bought a new shirt."],["sound","صوت","sut","core","سمعت صوت غريب","sm3et sut ghrib","I heard a strange sound."],["take","خود","khud","core","خود هاد الكتاب","khud had lktab","Take this book."],["only","غير","ghir","core","غير أنا فهمت","ghir ana fhemt","Only I understood."],["little","صغير","sghir","core","هادا الدري صغير بزاف","hada ddri sghir bzzaf","This child is very small."],["work","خدمة","khedma","core","الخدمة ديالي صعيبة","lkhedma dyali s3iba","My work is difficult."],["know","عرف","3ref","core","ما كنعرفش الجواب","ma kan3refsh ljwab","I don't know the answer."],["place","بلاصة","blasa","core","هادي بلاصة زوينة","hadi blasa zwina","This is a nice place."],["year","عام / سنة","3am / sana","core","هاد العام كان مزيان","had l3am kan mzyan","This year was good."],["live","عيش","3ich","core","بغيت نعيش هنا","bghit n3ich hna","I want to live here."],["me","ليا","liya","core","عطيني الكتاب ليا","3tini lktab liya","Give the book to me."],["back","لور / رجع","lor / rja3","core","رجع للدار من بعد","rja3 ddar men b3d","He went back home after."],["give","عطي","3ti","core","عطاني هدية زوينة","3tani hadiya zwina","He gave me a nice gift."],["most","كثر","ktar","core","هو أكثر واحد كايخدم","huwa ktar wahed kaykhdem","He is the one who works the most."],["very","بزاف","bzzaf","core","هاد الماكلة بنينة بزاف","had lmakla bnina bzzaf","This food is very delicious."],["after","من بعد","men b3d","core","من بعد الخدمة غادي نمشي","men b3d lkhedma ghadi nimshi","After work I will go."],["thing","حاجة","haja","core","هاد الحاجة ديالك","had lhaja dyalek","This thing is yours."],["our","ديالنا","dyalna","core","الدار ديالنا كبيرة","ddar dyalna kbira","Our house is big."],["just","غير","ghir","core","غير بغيت نشوفك","ghir bghit nshufek","I just wanted to see you."],["name","سمية / إسم","smiya / ism","core","أشنو هو الإسم ديالك؟","ashnu huwa lism dyalek?","What is your name?"],["good","مزيان","mzyan","core","هادا الطعام مزيان","hada ttaam mzyan","This food is good."],["sentence","جملة","joumla","core","هاد الجملة طويلة","had ljoumla twila","This sentence is long."],["man","راجل","rajel","core","هادا الراجل قوي","hada rrajel qwi","This man is strong."],["think","فكر","fker","core","كنفكر فيك بزاف","kanfker fik bzzaf","I think about you a lot."],["say","قول","qul","core","قال ليا الحقيقة","qal liya l7aqiqa","He told me the truth."],["great","كبير","kbir","core","هادا كان نهار كبير","hada kan nhar kbir","That was a great day."],["where","فين","fin","core","فين كاين المطار؟","fin kayn lmtar?","Where is the airport?"],["help","ساعد / عاون","sa3ed / 3awen","core","ساعدني نحمل هادشي","sa3edni n7mel hadshi","Help me carry this."],["through","من خلال","men khlal","core","مشيت من خلال الحديقة","mshit men khlal l7adiqa","I walked through the garden."],["much","بزاف","bzzaf","core","بغيت بزاف ديال الصبر","bghit bzzaf dyal sber","I need a lot of patience."],["before","قبل","qbel","core","جا قبل ما نمشي","ja qbel ma nimshi","He came before I left."],["line","خط / سطر","khat","core","كتب خط تحت الكلمة","ktb khat tht lkelma","He drew a line under the word."],["right","صحيح","sa7i7","core","نتا صحيح فهادشي","nta sa7i7 f hadshi","You are right about this."],["too","حتى","7etta","core","غير حتى نتا تقدر","ghir 7etta nta tqder","Even you can do it."],["means","كيفما","ya3ni","core","أشنو كيفما هادشي؟","ashnu kifma hadshi?","What does this mean?"],["old","قديم / شايب","qdim / shayb","core","هادا الراجل قديم","hada rrajel qdim","This man is old."],["any","شي","chi","core","شي وقت كنخرج للمشي","chi weqt kankhrej lmshi","Sometimes I go out for a walk."],["same","بحالو","b7alu","core","بحالو بحال خوه","b7alu b7al khuh","He is the same as his brother."],["tell","قول / حكي","qul / 7ki","core","قول ليا أشنو صرا","qul liya ashnu sra","Tell me what happened."],["boy","ولد","weld","core","هادا الولد صغير","hada lweld sghir","This boy is small."],["follow","تبع","tba3","core","تبع الطريق لتحت","tba3 ttriq l-tht","Follow the road down."],["came","جا","ja","core","جا عندي البارح فالليل","ja 3ndi lbare7 f llil","He came to my house yesterday at night."],["want","بغي","bghi","core","بغيت نمشي للبحر","bghit nimshi l lb7ar","I want to go to the sea."],["show","ورّي","werri","core","ورّيني الطريق عافاك","werrini ttriq 3afak","Show me the way please."],["also","حتى","7etta","core","حتى هو فرحان","7etta huwa fer7an","He is also happy."],["around","حوالي / فحوالي","7wali","core","حوالي عشرين دقيقة","7wali 3achrin deqiqa","Around twenty minutes."],["form","شكل / استمارة","shekl","core","عبّا الاستمارة دابا","3bba listimara daba","Fill out the form now."],["three","تلاتة","tlata","core","عندي تلاتة ديال الدراري","3andi tlata dyal ddrari","I have three children."],["small","صغير","sghir","core","هادا البيت صغير","hada lbit sghir","This room is small."],["set","ثابت / وضع","wad3","core","الشمس غادي تغيب","shams ghadi tghib","The sun is setting."],["put","وضع / دير","wad3 / dir","core","ضع الكتاب فوق الطبلة","wad3 lktab fuq tabla","Put the book on the table."],["end","آخر / نهاية","akher / nihaya","core","وصلت لآخر الطريق","wselt l akher ttriq","I reached the end of the road."],["does","كيدير","kaydir","core","كيدير خدمتو مزيان","kaydir khedmtu mzyan","He does his work well."],["another","آخر","akhor","core","بغيت كتاب آخر","bghit ktab akhor","I want another book."],["well","مزيان","mzyan","core","داز النهار مزيان","daz nnhar mzyan","The day went well."],["large","كبير","kbir","core","هاد الدار كبيرة بزاف","had ddar kbira bzzaf","This house is very large."],["must","خاصك / لازم","khassek / lazem","core","خاصك تخدم بزاف","khassek tkhdem bzzaf","You must work hard."],["big","كبير","kbir","core","هادا الكلب كبير","hada lkelb kbir","This dog is big."],["even","حتى","7etta","core","حتى هو جا","7etta huwa ja","Even he came."],["such","بحال هادشي","b7al hadshi","core","بحال هادشي ماشي مزيان","b7al hadshi machi mzyan","Such a thing is not good."],["because","حيت","7it","core","حيت كان عيان","7it kan 3yan","Because he was tired."],["turn","دور","dur","core","دور الكلام مزيان","dur lklam mzyan","Choose your words well."],["here","هنا","hna","core","هنا كاين بزاف ديال الناس","hna kayn bzzaf dyal nnas","There are a lot of people here."],["why","علاش","3lash","core","علاش جيتي متأخر؟","3lash jiti met'akhar?","Why did you come late?"],["ask","سول","swel","core","سولت عليه فالسوق","swelt 3lih f ssuq","I asked about him in the market."],["went","مشى","mcha","core","مشى للخدمة بكري","mcha lkhedma bekri","He went to work early."],["men","رجال","rjal","core","الرجال خدامين هنا","rrjal khaddamin hna","The men work here."],["read","قرا","qra","core","قرا الكتاب كامل","qra lktab kamel","He read the whole book."],["need","خاصني / حتاج","khassni / 7taj","core","حتاج نشري حوايج جداد","7taj nshri 7wayej jdad","I need to buy new clothes."],["land","أرض","ard","core","هاد الأرض خصبة","had lard khasba","This land is fertile."],["different","مختلف","mokhtalef","core","هادا مختلف على هاداك","hada mokhtalef 3la hadak","This is different from that."],["home","دار","dar","core","رجعت للدار بعد الخدمة","rje3t ddar b3d lkhedma","I went home after work."],["us","حنا / لينا","lina","core","حنا غادين سوا","7na ghadin swa","We are going together."],["move","تحرك","t7rrek","core","تحرك بزربة عافاك","t7rrek bzerba 3afak","Move quickly please."],["try","حاول","7awel","core","حاول مرة خرى","7awel merra khra","Try one more time."],["kind","نوع","no3","core","أشنو النوع ديال هادشي؟","ashnu nno3 dyal hadshi?","What kind of thing is this?"],["hand","يد","yed","core","شد بيدك هادشي","shedd b yedek hadshi","Hold this with your hand."],["picture","تصويرة","tsswira","core","شوف هاد التصويرة الزوينة","shuf had tsswira zwina","Look at this beautiful picture."],["again","مرة خرى / بعد","merra khra","core","بغيت نشوفك مرة خرى","bghit nshufek merra khra","I want to see you again."],["change","بدل","bdel","core","بدلت الراي ديالي","bdelt rray dyali","I changed my mind."],["off","بعيد / طفي","tfi","core","طفي الضو عافاك","tfi ddo 3afak","Turn off the light please."],["play","لعب","l3eb","core","بغيت نلعب معاك","bghit nl3eb m3ak","I want to play with you."],["spell","هجي / تهجى","tahajja","core","تهجى هاد الكلمة عافاك","tahajja had lkelma 3afak","Spell this word please."],["air","هواء","hwa","core","الهواء بارد اليوم","lhwa bared lyum","The air is cold today."],["away","بعيد","b3id","core","ساكن بعيد على المدينة","saken b3id 3la lmdina","He lives far from the city."],["animal","حيوان","7ayawan","core","عندي حيوان فالدار","3andi 7ayawan f ddar","I have an animal at home."],["house","دار","dar","core","الدار ديالي قريبة من السوق","ddar dyali qriba men ssuq","My house is close to the market."],["point","نقطة","noqta","core","أشار بيدو على الباب","ashar b yeddu 3la lbab","He pointed at the door."],["page","صفحة","sa7ifa","core","قلب الصفحة عافاك","qleb sa7ifa 3afak","Turn the page please."],["letter","برية / حرف","brwa / 7arf","core","صيفط ليا برية","saifet liya brwa","Send me a letter."],["mother","ماما / والدة","mama / walida","core","ماما ديالي طباخة مزيانة","mama dyali tabbakha mzyana","My mother is a good cook."],["answer","جواب","jwab","core","الجواب صحيح","ljwab sa7i7","The answer is correct."],["found","لقا","lqa","core","لقيت الكتاب لي ضعت","lqit lktab li dat","I found the book I lost."],["study","قرا / درس","qra / dres","core","قرا بزاف من أجل الإمتحان","qra bzzaf men ajl limti7an","He studied a lot for the exam."],["still","باقي / مازال","baqi / mazal","core","باقي فالدار","baqi f ddar","He is still at home."],["learn","تعلم","t3llem","core","تعلم اللغة العربية","t3llem llugha l3arabiya","He learned Arabic."],["should","خاصك","khassek","core","خاصك تجي بكري","khassek tji bekri","You should come early."],["America","أمريكا","Amrika","core","سافرت لأمريكا","saferte l amrika","I traveled to America."],["world","العالم","el3alam","core","العالم كبير بزاف","l3alam kbir bzzaf","The world is very big."],["high","عالي","3ali","core","الجبل عالي بزاف","jbel 3ali bzzaf","The mountain is very high."],["every","كل","kol","core","كل واحد كايخدم هنا","kol wahed kaykhdem hna","Everyone works here."],["near","قريب","qrib","core","الدار قريبة من السوق","ddar qriba men ssuq","The house is near the market."],["add","زيد","zid","core","زيد شوية ديال الملحة","zid shwiya dyal lme7la","Add a little salt."],["food","ماكلة","makla","core","الماكلة لذيذة بزاف","lmakla ladida bzzaf","The food is very delicious."],["between","بين","bin","core","الدار بين السوق و المدرسة","ddar bin ssuq w lmadrasa","The house is between the market and the school."],["own","الخاص ديالو","lkhass dyalu","core","هاد الدار ديالو الخاص","had ddar dyalu lkhass","This house is his own."],["below","تحت","tht","core","الكتاب تحت الطبلة","lktab tht tabla","The book is below the table."],["country","بلاد","blad","core","المغرب بلاد زوينة","lmaghrib blad zwina","Morocco is a beautiful country."],["plant","نبتة","nabta","core","غرست نبتة جديدة","ghrest nabta jdida","I planted a new plant."],["last","آخر / لاخر","akher","core","هاد العام الأخير دخلت الجامعة","had l3am lakher dkhalt ljami3a","Last year I entered university."],["school","مدرسة","madrasa","core","الدراري كاينين فالمدرسة","ddrari kaynin f lmadrasa","The kids are at school."],["father","بابا / والد","baba / walid","core","بابا ديالي طبيب","baba dyali tbib","My father is a doctor."],["keep","حافظ / خلي","7afed / khelli","core","خاصك تحافظ على صحتك","khassek t7afed 3la se77tek","You should keep your health."],["tree","شجرة","shejra","core","الشجرة كبيرة فالحديقة","shejra kbira f l7adiqa","The tree is big in the garden."],["never","عمرك ما","3omrek ma","core","عمرني ما نسيت هادشي","3omrni ma nsit hadshi","I have never forgotten this."],["start","بدا","bda","core","بداو الدرس دابا","bdaw dders daba","They started the lesson now."],["city","مدينة","mdina","core","المدينة كبيرة بزاف","lmdina kbira bzzaf","The city is very big."],["earth","أرض","ard","core","الأرض كاتدور حوالي الشمس","lard katdur 7wali shams","The earth rotates around the sun."],["eye","عين","3in","core","عينيه زرق","3aynih zreq","His eyes are blue."],["light","ضو / خفيف","do","core","الضو محلول فالبيت","ddo m7lul f lbit","The light is on in the room."],["thought","فكرة / فكر","fikra","core","عندي فكرة زوينة","3andi fikra zwina","I have a great idea."],["head","راس","ras","core","راسي كايوجعني","rasi kayuje3ni","My head hurts."],["under","تحت","tht","core","الكتاب تحت الطبلة","lktab tht tabla","The book is under the table."],["story","قصة","qissa","core","هادي قصة زوينة","hadi qissa zwina","This is a beautiful story."],["saw","شاف","shaf","core","شفت صاحبي فالسوق","sheft sa7bi f ssuq","I saw my friend at the market."],["left","لخر / لسرى","lisra","core","دور لليسار من بعد الطريق","dur llisra men b3d ttriq","Turn left after the road."],["don't","ماشي / ما...ش","ma...sh","core","ما كنبغيش هادشي","ma kanbghish hadshi","I don't want this."],["few","شوية / قليل","shwiya","core","بقا شي شوية ديال الوقت","bqa chi shwiya dyal lweqt","There's a little time left."],["while","ملي / بينما","mli","core","ملي كان كايقرا، دخلت","mli kan kayqra, dkhalt","While he was reading, I came in."],["along","مع / طول","m3a","core","مشينا طول البحر","mshina tul lb7ar","We walked along the sea."],["might","يمكن","yemken","core","يمكن غادي يشتي اليوم","yemken ghadi yshti lyum","It might rain today."],["close","قريب / سد","qrib / sedd","core","الدار ديالي قريبة من تما","ddar dyali qriba men tma","My house is close to there."],["something","شي حاجة","chi haja","core","بغيت نقول ليك شي حاجة","bghit nqul lik chi haja","I want to tell you something."],["seem","بان / يبان","ybaan","core","كيبان فرحان بزاف","kayban fer7an bzzaf","He seems very happy."],["next","اللي من بعد / الجاي","li jay","core","الطبقة الجاية ديال الانجليزية","ttabaqa jaya dyal nglizia","The next class is English."],["hard","قاسي / صعيب","qasi / s3ib","core","هاد الإمتحان صعيب","had limti7an s3ib","This exam is hard."],["open","حل / مفتوح","7el / mft0u7","core","حل الباب عافاك","7el lbab 3afak","Open the door please."],["example","مثال","mital","core","هادا مثال مزيان","hada mital mzyan","This is a good example."],["begin","بدا","bda","core","بدا يقرا فالساعة سبعة","bda yqra f ssa3a sb3a","He began studying at seven o'clock."],["life","حياة","7ayat","core","الحياة صعيبة شي مرات","l7ayat s3iba chi mrat","Life is hard sometimes."],["always","ديما","dima","core","ديما كنفكر فيك","dima kanfker fik","I always think of you."],["those","هاداك / هادو","hadak","core","هاداك لكتب ديالي","hadak lktub dyali","Those books are mine."],["both","بجوج","bjuj","core","بجوج خدامين هنا","bjuj khaddamin hna","Both of them work here."],["paper","ورقة","warqa","core","كتبت على الورقة","ktbt 3la lwarqa","I wrote on the paper."],["together","مع بعض","m3a b3dh","core","خدمنا مع بعض اليوم","khdemna m3a b3dh lyum","We worked together today."],["got","حصل / جبد","h9al","core","حصلت على شهادة جديدة","h9elt 3la shahada jdida","I got a new certificate."],["group","فرقة / جروپ","groupe","core","الفرقة ديالنا كبيرة","lfarqa dyalna kbira","Our group is big."],["often","كثر / بزاف الوقت","ghaliban","core","كثر ما كنخرج للمشي","kter ma kankhrej lmshi","I often go out for a walk."],["run","جري","jri","core","جري بزربة للمدرسة","jra bzerba lmadrasa","He ran quickly to school."],["important","مهم","muhim","core","هادشي مهم بزاف ليا","hadshi muhim bzzaf liya","This is very important to me."],["until","حتى","7etta","core","خدم حتى لقا الجواب","khdem 7etta lqa ljwab","He worked until he found the answer."],["children","درارى","drari","core","الدراري كايلعبو فالحديقة","ddrari kayl3bu f l7adiqa","The children are playing in the garden."],["side","جنب / طرف","jeneb","core","هو جنبي فالطبلة","huwa jenbi f tabla","He is next to me at the table."],["feet","لكراع","lkra3","core","لكراع ديالي كايوجعوني","lkra3 dyali kayuje3uni","My feet hurt."],["car","طوموبيل","tomobil","core","شريت طوموبيل جديدة","shrit tomobil jdida","I bought a new car."],["mile","ميل","mil","core","المدينة بعيدة ميل واحد","lmdina b3ida mil wahed","The city is one mile away."],["night","ليل","lil","core","سهرنا حتى الليل","sherna 7etta llil","We stayed up until night."],["walk","تمشى","tmcha","core","تمشيت فالحديقة","tmchit f l7adiqa","I walked in the garden."],["white","بيض","byed","core","القميجة ديالو بيضة","lqamija dyalu byda","His shirt is white."],["sea","بحر","b7ar","core","البحر زوين بزاف","lb7ar zwin bzzaf","The sea is very beautiful."],["began","بدا","bda","core","بداو يخدمو فالصباح","bdaw ykhedmu f sba7","They began working in the morning."],["grow","كبر / نبت","kber","core","الشجرة كبرت بزاف","shejra kbret bzzaf","The tree grew a lot."],["took","خدا","khda","core","خدا الكتاب من فوق الطبلة","khda lktab men fuq tabla","He took the book from the table."],["river","واد / نهر","wad","core","الواد كبير بزاف","lwad kbir bzzaf","The river is very big."],["four","ربعة","rab3a","core","عندي ربعة ديال الإخوة","3andi rab3a dyal lkhwa","I have four siblings."],["carry","حمل","7mel","core","حملت الصاك للدار","7melt ssak ddar","I carried the bag home."],["state","دولة / حالة","dawla / 7ala","core","الدولة كبيرة بزاف","ddawla kbira bzzaf","The country is very large."],["once","مرة واحدة","merra wahda","core","مرة واحدة سافرت لمصر","merra wahda safert l mesr","Once I traveled to Egypt."],["book","كتاب","ktab","core","قرا كتاب جديد","qra ktab jdid","He read a new book."],["hear","سمع","sma3","core","سمعت صوت غريب فالليل","sm3et sut ghrib f llil","I heard a strange sound at night."],["stop","وقف","weqef","core","وقف السيارة هنا","weqef ssayara hna","He stopped the car here."],["without","بلا","bla","core","خرجت بلا فلوس","khrejt bla flus","I went out without money."],["second","تاني / ثانية","tani","core","هادي تانية مرة","hadi tanya merra","This is the second time."],["later","من بعد","men b3d","core","من بعد جا صاحبي","men b3d ja sa7bi","Later my friend came."],["miss","اشتاق","shteq","core","اشتقت بزاف لداري","shteqt bzzaf ddari","I missed my home a lot."],["idea","فكرة","fikra","core","عندي فكرة زوينة","3andi fikra zwina","I have a great idea."],["enough","باقة / كافي","kafi","core","هادشي كافي ليا","hadshi kafi liya","This is enough for me."],["eat","كول","kul","core","كلينا ماكلة بنينة","klina makla bnina","We ate delicious food."],["face","وجه","wjeh","core","وجهو فرحان بزاف","wjehu fer7an bzzaf","His face is very happy."],["watch","تفرج / ساعة","tfrrej","core","تفرجت فالفيلم البارح","tfrrejt f film lbare7","I watched the movie yesterday."],["really","بصح / فعلا","bsa7","core","هادا بصح زوين","hada bsa7 zwin","This is really nice."],["far","بعيد","b3id","core","ساكن بعيد على المدينة","saken b3id 3la lmdina","He lives far from the city."],["almost","تقريبا","taqriban","core","تقريبا وصلنا","taqriban wselna","We almost arrived."],["let","خلي","khelli","core","خليني نشوف هادشي","khellini nshuf hadshi","Let me see this."],["above","فوق","fuq","core","الطيارة كانت فوق السحاب","ttyara kant fuq ssa7ab","The plane was above the clouds."],["girl","بنت","bent","core","هادي بنت زوينة","hadi bent zwina","This is a beautiful girl."],["sometimes","شي مرات","chi mrat","core","شي مرات كنبقى فالدار","chi mrat kanbqa f ddar","Sometimes I stay home."],["cut","قطع","q6e3","core","قطع الخبز جوج","q6e3 lkhobz juj","He cut the bread in two."],["young","صغير فالعمر","sghir","core","هو صغير فالعمر","huwa sghir f l3omr","He is young in age."],["talk","هضر / كلم","hder / kellem","core","هضرت معاه بزاف","hdert m3ah bzzaf","I talked with him a lot."],["soon","دغيا / قريب","daghya","core","غادي نمشي دغيا","ghadi nimshi daghya","I will go soon."],["list","لائحة / ليستة","lista","core","كتبت لائحة ديال الحوايج","ktebt lista dyal l7wayej","I wrote a list of things."],["song","غنية","ghenya","core","غنية زوينة هاد الغنية","ghenya zwina had lghenya","This song is beautiful."],["being","كاين / راه","kayn","core","كاين راه فالدار","kayn rah f ddar","He is being at home."],["leave","مشي / خرج","mshi","core","مشى من الدار بكري","mcha men ddar bekri","He left the house early."],["family","عائلة / لاهل","3ayla","core","العائلة ديالي كبيرة","l3ayla dyali kbira","My family is big."],["it's","هادشي هو","hadshi huwa","core","هادشي هو الجواب الصحيح","hadshi huwa ljwab sa7i7","It's the correct answer."],["body","جسم","jisem","core","جسمي كايوجعني","jismi kayuje3ni","My body hurts."],["music","موسيقى","musiqa","core","بغيت نسمع موسيقى","bghit nesma3 musiqa","I want to listen to music."],["five","خمسة","khamsa","time","عندي خمسة ديال الكتب","3andi khamsa dyal lkutub","I have five books."],["six","ستة","stta","time","جا فالساعة ستة","ja f ssa3a stta","He came at six o'clock."],["seven","سبعة","sb3a","time","عندي سبعة ديال السنين هنا","3andi sb3a dyal snin hna","I have been here seven years."],["eight","تمنية","tmnya","time","الساعة تمنية دابا","ssa3a tmnya daba","It's eight o'clock now."],["nine","تسعود","tss3ud","time","عندو تسعود سنين","3andu tss3ud snin","He is nine years old."],["ten","عشرة","3achra","time","عشرة دراهم غير","3achra drahem ghir","Just ten dirhams."],["eleven","حداش","7dash","time","وصلنا فحداش الليل","wselna f 7dash llil","We arrived at eleven at night."],["twelve","طناش","tnash","time","الساعة طناش دابا","ssa3a tnash daba","It's twelve o'clock now."],["twenty","عشرين","3achrin","time","عندو عشرين سنة","3andu 3achrin sana","He is twenty years old."],["thirty","تلاتين","tlatin","time","تلاتين دقيقة وغادي نجي","tlatin deqiqa w ghadi nji","Thirty minutes and I'll come."],["forty","أربعين","arb3in","time","شريت بأربعين درهم","shrit b arb3in dirham","I bought it for forty dirhams."],["fifty","خمسين","khamsin","time","عمرو خمسين سنة","3omru khamsin sana","He is fifty years old."],["hundred","ميا","miya","time","شريت بميا درهم","shrit b miya dirham","I bought it for a hundred dirhams."],["thousand","ألف","alf","time","عندو ألف درهم","3andu alf dirham","He has a thousand dirhams."],["zero","زيرو / صفر","zero","time","الحساب صفر دابا","l7sab zero daba","The bill is zero now."],["today","اليوم","lyum","time","اليوم نهار زوين","lyum nhar zwin","Today is a nice day."],["tomorrow","غدا","ghedda","time","غدا غادي نمشي للسوق","ghedda ghadi nimshi l ssuq","Tomorrow I will go to the market."],["yesterday","البارح","lbare7","time","البارح كان بارد","lbare7 kan bared","Yesterday was cold."],["week","سيمانة","simana","time","هاد السيمانة بزاف فيها خدمة","had ssimana bzzaf fiha lkhedma","This week has a lot of work."],["month","شهر","shher","time","هاد الشهر طويل بزاف","had shher twil bzzaf","This month is very long."],["hour","ساعة","sa3a","time","بقيت ساعة كاملة كنتسنى","bqit sa3a kamla kantsenna","I waited a whole hour."],["minute","دقيقة","deqiqa","time","تسنى دقيقة عافاك","tsenna deqiqa 3afak","Wait a minute please."],["morning","صباح","sba7","time","نقرا فالصباح","nqra f sba7","I study in the morning."],["afternoon","بعد الظهر","b3d edd0hr","time","غادي نخرج بعد الظهر","ghadi nkhrej b3d edd0hr","I will go out in the afternoon."],["evening","العشية","l3shiya","time","نتلاقاو فالعشية","ntlaqaw f l3shiya","We'll meet in the evening."],["noon","الظهر","dohr","time","جا فالظهر","ja f dohr","He came at noon."],["midnight","نص الليل","ness llil","time","صحيت فنص الليل","s7it f ness llil","I woke up at midnight."],["Monday","الإتنين","letnin","time","نخدم نهار الإتنين","nkhdem nhar letnin","I work on Monday."],["Tuesday","التلات","ttlat","time","التلات غادي نمشي للسوق","ttlat ghadi nimshi l ssuq","On Tuesday I'm going to the market."],["Wednesday","الأربعاء","larb3a","time","الأربعاء عندي إمتحان","larb3a 3andi limti7an","On Wednesday I have an exam."],["Thursday","الخميس","lkhmis","time","الخميس فيه طبلة","lkhmis fih tabla","Thursday has class."],["Friday","الجمعة","jjem3a","time","نمشي للجامع نهار الجمعة","nimshi ljame3 nhar jjem3a","I go to the mosque on Friday."],["Saturday","السبت","ssebt","time","السبت كنتسنى","ssebt kantsenna","On Saturday I rest."],["Sunday","الحد","le7ed","time","الحد كنزور الوالدين","le7ed kanzur lwalidin","On Sunday I visit my parents."],["January","يناير","yanayer","time","ولدت فيناير","wleddt f yanayer","I was born in January."],["February","فبراير","fabrayer","time","فبراير شهر قصير","fabrayer shher qsir","February is a short month."],["March","مارس","mars","time","مارس فيه الربيع","mars fih rrbi3","March has spring."],["April","أبريل","abril","time","أبريل شهر زوين","abril shher zwin","April is a nice month."],["June","يونيو","yunyu","time","يونيو سخون بزاف","yunyu skhun bzzaf","June is very hot."],["July","يوليوز","yulyuz","time","يوليوز شهر الصيف","yulyuz shher ssif","July is a summer month."],["August","غشت","ghocht","time","غشت سخون بزاف","ghocht skhun bzzaf","August is very hot."],["September","شتنبر","shutanbir","time","شتنبر تبدا فيه المدرسة","shutanbir tebda fih lmadrasa","School starts in September."],["October","أكتوبر","october","time","أكتوبر فيه برد","october fih berd","October has cold."],["November","نونبر","novambir","time","نونبر شهر الشتا","novambir shher shta","November is a rainy month."],["December","دجنبر","dujanbir","time","دجنبر فيه العيد","dujanbir fih l3id","December has the holiday."],["season","فصل","fasl","time","هاد الفصل زوين","had fasl zwin","This season is nice."],["spring","الربيع","rbi3","time","الربيع فيه النوار","rrbi3 fih nnwar","Spring has flowers."],["summer","الصيف","ssif","time","الصيف سخون فالمغرب","ssif skhun f lmaghrib","Summer is hot in Morocco."],["autumn","الخريف","lkhrif","time","الخريف فيه الشتا","lkhrif fih shta","Autumn has rain."],["winter","الشتا","shta","time","الشتا بارد بزاف","shta bared bzzaf","Winter is very cold."],["clock","مغانة","mghana","time","المغانة وقفت","lmghana weqfet","The clock stopped."],["calendar","تقويم / كالندري","calandrié","time","شفت التقويم ديال هاد العام","sheft taqwim dyal had l3am","I saw this year's calendar."],["century","قرن","qarn","time","هادشي صرا قرن كامل","hadshi sra qarn kamel","This happened a whole century ago."],["early","بكري","bekri","time","جا بكري بزاف","ja bekri bzzaf","He came very early."],["late","متأخر / فايت لوقت","met'akhar","time","تأخر بزاف اليوم","ta'akhar bzzaf lyum","He was very late today."],["recently","هاد الأيام","had layam","time","شريت هاد الكتاب هاد الأيام","shrit had lktab had layam","I bought this book recently."],["future","المستقبل","lmustaqbal","time","المستقبل ديالك زوين","lmustaqbal dyalek zwin","Your future is bright."],["past","الماضي / اللي فات","li fat","time","اللي فات ماشي مهم","li fat machi muhim","The past is not important."],["present","الحاضر / دابا","l7ader","time","دابا الحاضر مهم","daba l7ader muhim","Now the present matters."],["brother","خو","kho","family","خويا كايخدم فالمستشفى","khuya kaykhdem f lmustashfa","My brother works at the hospital."],["sister","خت","khet","family","خاتي كاتقرا فالجامعة","khti katqra f ljami3a","My sister studies at university."],["son","ولد","weld","family","ولدي صغير بزاف","weldi sghir bzzaf","My son is very young."],["daughter","بنت","bent","family","بنتي كاتلعب فالحديقة","benti katl3eb f l7adiqa","My daughter plays in the garden."],["husband","راجل / زوج","razel","family","راجلها طبيب","razelha tbib","Her husband is a doctor."],["wife","مرا / زوجة","mra","family","مراتو فرحانة بزاف","mratu fer7ana bzzaf","His wife is very happy."],["grandfather","جد","jed","family","جدي شايب دابا","jeddi shayb daba","My grandfather is old now."],["grandmother","جدة / حنا","jedda / 7nna","family","جدتي تطبخ مزيان","jeddti tetbakh mzyan","My grandmother cooks well."],["uncle","خال / عم","khal / 3am","family","خالي ساكن فالدار الجاية","khali saken f ddar jjaya","My uncle lives in the next house."],["aunt","خالتي / عمتي","khalti / 3amti","family","خالتي زارتنا البارح","khalti zaretna lbare7","My aunt visited us yesterday."],["cousin","ولد العم / بنت الخال","weld l3am","family","ولد عمي صاحبي","weld 3ammi sa7bi","My cousin is my friend."],["baby","بيبي / رضيع","bibi","family","البيبي كاينعس دابا","lbibi kayn3es daba","The baby is sleeping now."],["child","طفل / درّي","drri","family","الطفل كايلعب برا","ttfel kayl3eb bra","The child is playing outside."],["friend","صاحب / صديق","sa7eb","family","صاحبي جاني اليوم","sa7bi jani lyum","My friend came to see me today."],["neighbor","جار","jar","family","جاري مزيان بزاف","jari mzyan bzzaf","My neighbor is very nice."],["teacher","أستاذ / مودرّس","ustad","family","الأستاذ ديالي صبور","lustad dyali sabur","My teacher is patient."],["student","تلميذ / طالب","talib","family","التلميذ قرا الكتاب كامل","ttalib qra lktab kamel","The student read the whole book."],["doctor","طبيب","tbib","family","الطبيب فحصني اليوم","ttbib f7esni lyum","The doctor examined me today."],["nurse","ممرضة","mumarrida","family","الممرضة ساعدت المرضى","lmumarrida sa3edet lmuradh","The nurse helped the patients."],["police","بوليس","bulis","family","البوليس وقف السيارة","lbulis weqef ssayara","The police stopped the car."],["lawyer","محامي","mou7ami","family","المحامي شرح القانون","lmou7ami shre7 lqanun","The lawyer explained the law."],["engineer","مهندس","muhandis","family","المهندس بنى الجسر","lmuhandis bna lqantra","The engineer built the bridge."],["driver","شوفور / سايق","shofor","family","الشوفور كايسوق بزربة","shofor kaysuq bzerba","The driver drives quickly."],["farmer","فلاح","fellah","family","الفلاح كايخدم فالحقل","lfellah kaykhdem f l7aql","The farmer works in the field."],["worker","عامل / خدّام","khaddam","family","العامل خدام بزاف","l3amel khaddam bzzaf","The worker works a lot."],["boss","مول الخدمة / شاف","mul lkhedma","family","الشاف ديالنا مزيان","shshaf dyalna mzyan","Our boss is good."],["king","ملك","malik","family","الملك زار المدينة","lmalik zar lmdina","The king visited the city."],["queen","ملكة","malika","family","الملكة جميلة بزاف","lmalika jamila bzzaf","The queen is very beautiful."],["president","رئيس","ra'is","family","الرئيس هضر فالتيليفزيون","ra'is hder f ttlfaza","The president spoke on television."],["guest","ضيف","dif","family","الضيف جا دابا","ddif ja daba","The guest arrived now."],["stranger","غريب","ghrib","family","شفت راجل غريب","sheft rajel ghrib","I saw a stranger."],["adult","كبير","kbir","family","هو كبير دابا","huwa kbir daba","He is an adult now."],["person","واحد / شخص","wahed","family","شي شخص عيط ليا","chi shakhs 3yyat liya","Some person called me."],["couple","زوج (جوج ناس)","juj","family","هما زوج زوينين","huma juj zwinin","They are a nice couple."],["team","فرقة / إكيپ","equipe","family","الفرقة ديالنا ربحت","lfarqa dyalna rab7et","Our team won."],["arm","دراع","dra3","body","دراعي كايوجعني","dra3i kayuje3ni","My arm hurts."],["leg","ريجل","rejl","body","ريجلي طويلة","rejli twila","My leg is long."],["finger","صبع","seb3","body","صبعي قطع","seb3i q6e3","My finger got cut."],["foot","قدم / كرع","kra3","body","قدمي صغيرة","qedmi sghira","My foot is small."],["ear","ودن","wden","body","ودني كايوجعني","wedni kayuje3ni","My ear hurts."],["nose","نيف","nif","body","نيفو طويل","nifu twil","His nose is long."],["mouth","فم / حلق","fomm","body","فمي كايوجعني","fommi kayuje3ni","My mouth hurts."],["tooth","سنة","senna","body","سنتي كايوجعني","senniti kayuje3ni","My tooth hurts."],["hair","شعر","sh3er","body","شعري طويل","sh3ri twil","My hair is long."],["stomach","كرش / بطن","karsh","body","كرشي كايوجعني","karshi kayuje3ni","My stomach hurts."],["heart","قلب","qelb","body","قلبو طيب بزاف","qelbu tayb bzzaf","His heart is very kind."],["blood","دم","demm","body","الدم كيخرج من جرحو","ddemm kaykhrej men jer7u","Blood is coming from his wound."],["bone","عظم","3adm","body","عظمو كسر","3admu kser","His bone broke."],["skin","جلد / كَدّ","jeld","body","جلدي حساس","jeldi 7assas","My skin is sensitive."],["brain","موخ","mukh","body","الموخ كايفكر بزاف","lmukh kayfker bzzaf","The brain thinks a lot."],["voice","صوت","sut","body","صوتو عالي بزاف","sutu 3ali bzzaf","His voice is very loud."],["breath","نفس","nfes","body","خد نفس عميق","khud nfes 3amiq","Take a deep breath."],["sick","مرض / مريض","mrad","body","هو مرض اليوم","huwa mrad lyum","He got sick today."],["healthy","بصحة","bse77a","body","راه بصحة دابا","rah bse77a daba","He is healthy now."],["pain","وجع / ضرر","wja3","body","عندي وجع فالظهر","3andi wja3 f ddher","I have pain in my back."],["medicine","دوا","dwa","body","خاصني الدوا دابا","khassni ddwa daba","I need medicine now."],["hospital","سبيطار","sbitar","body","جا للسبيطار البارح","ja sbitar lbare7","He went to the hospital yesterday."],["pharmacy","فارماسيان","farmasyan","body","مشيت للفارماسيان","mshit l farmasyan","I went to the pharmacy."],["fever","سخانة / حمى","skhana","body","عندو سخانة قوية","3andu skhana qwiya","He has a strong fever."],["cold","برد / تبرد","berd","body","مرض بالبرد","mrad b lberd","He got sick with a cold."],["cough","كحة / السعال","ke77a","body","عندو كحة بزاف","3andu ke77a bzzaf","He has a bad cough."],["rest","استراح / تريّح","tri77","body","تريّح شوية عافاك","tri77 shwiya 3afak","Rest a little please."],["sleep","نعس","n3es","body","نعس بكري البارح","n3es bekri lbare7","He slept early yesterday."],["tired","عيا","3aya","body","عيا بزاف من الخدمة","3aya bzzaf men lkhedma","He is very tired from work."],["strong","قوي","qwi","body","هو قوي بزاف","huwa qwi bzzaf","He is very strong."],["weak","ضعيف","d3if","body","عيان وضعيف دابا","3yan w d3if daba","He is tired and weak now."],["fat","غليظ / سمين","ghlid","body","هاد الراجل غليظ","had rrajel ghlid","This man is fat."],["thin","رقيق / مزيوني","mzyuni","body","هي رقيقة بزاف","hiya rqiqa bzzaf","She is very thin."],["bread","خبز","khobz","food","بغيت نشري خبز","bghit nshri khobz","I want to buy bread."],["meat","لحم","l7em","food","اللحم غالي اليوم","ll7em ghali lyum","Meat is expensive today."],["chicken","جاج / دجاج","djaj","food","طيبت الجاج للعشا","tayybt djaj l 3sha","I cooked chicken for dinner."],["fish","حوت","7ut","food","كليت الحوت البارح","klit l7ut lbare7","I ate fish yesterday."],["egg","بيضة","bida","food","بغيت بيضتين","bghit bidtin","I want two eggs."],["milk","حليب","7lib","food","شربت كاس ديال الحليب","shrebt kas dyal l7lib","I drank a glass of milk."],["cheese","فرماج / جبن","fermaj","food","بغيت شوية ديال الفرماج","bghit shwiya dyal lfermaj","I want some cheese."],["butter","زبدة","zebda","food","الزبدة فالطلاجة","zzebda f ttlaja","The butter is in the fridge."],["sugar","سكر","sukkar","food","ما بغيتش سكر فالقهوة","ma bghitsh sukkar f lqehwa","I don't want sugar in the coffee."],["salt","ملحة","mel7a","food","زيد شوية ديال الملحة","zid shwiya dyal lme7la","Add a little salt."],["rice","روز","ruz","food","طيبت روز للغدا","tayybt ruz lghda","I cooked rice for lunch."],["pasta","معكرونة / پاط","pates","food","بغيت معكرونة اليوم","bghit pates lyum","I want pasta today."],["soup","حريرة / شربة","shorba","food","الشربة سخونة بزاف","shorba skhuna bzzaf","The soup is very hot."],["vegetable","خضرة","khodra","food","بغيت خضرة فالماكلة","bghit khodra f lmakla","I want vegetables in the food."],["fruit","فاكية","fakiya","food","الفاكية بنينة فالصيف","lfakiya bnina f ssif","Fruit is delicious in summer."],["apple","تفاحة","tef7a","food","شريت تفاحتين","shrit tef7atin","I bought two apples."],["orange","ليمون","limun","food","بغيت عصير اللمون","bghit 3asir llimun","I want orange juice."],["banana","بانان","banane","food","بغيت بانان واحدة","bghit banane wahda","I want one banana."],["tomato","ماطيشة","matisha","food","الماطيشة حمراء","lmatisha 7amra","The tomato is red."],["potato","بطاطا","btata","food","طيبت بطاطا للعشا","tayybt btata l 3sha","I cooked potatoes for dinner."],["onion","بصلة","basla","food","زيد بصلة فالماكلة","zid basla f lmakla","Add an onion to the food."],["garlic","توم","tum","food","التوم زوين فالطاجين","ttum zwin f ttajin","Garlic is nice in the tajine."],["coffee","قهوة","qehwa","food","بغيت قهوة بالحليب","bghit qehwa b l7lib","I want coffee with milk."],["tea","أتاي","atay","food","بغيت أتاي بالنعناع","bghit atay b nna3na3","I want mint tea."],["juice","عصير","3asir","food","شربت عصير التفاح","shrebt 3asir tef7a","I drank apple juice."],["wine","شراب / نبيد","shrab","food","شرب كاس ديال الشراب","shreb kas dyal shrab","He drank a glass of wine."],["cake","حلوة / كيك","7elwa","food","شريت حلوة للحفلة","shrit 7elwa l7afla","I bought a cake for the party."],["sweet","حلو","7lu","food","هاد الفاكية حلوة بزاف","had lfakiya 7lwa bzzaf","This fruit is very sweet."],["sour","حامض / حمض","7amed","food","اللمون حامض","llimun 7amed","The lemon is sour."],["bitter","مرار","mrer","food","هاد القهوة مرار","had lqehwa mrer","This coffee is bitter."],["spicy","حرّ","7arr","food","الماكلة حرة بزاف","lmakla 7arra bzzaf","The food is very spicy."],["salty","مالح","male7","food","الشربة ماسحة بزاف","shorba massa7a bzzaf","The soup is too salty."],["hungry","جيعان / مجوّع","jiy3an","food","جيعان بزاف دابا","jiy3an bzzaf daba","I am very hungry now."],["thirsty","عطشان","3atshan","food","عطشان بزاف","3atshan bzzaf","I am very thirsty."],["delicious","بنين","bnin","food","هاد الطاجين بنين بزاف","had ttajin bnin bzzaf","This tajine is very delicious."],["breakfast","الفطور","lftur","food","الفطور ديالي صغير","lftur dyali sghir","My breakfast is small."],["lunch","الغدا","lghda","food","الغدا كان بنين","lghda kan bnin","Lunch was delicious."],["dinner","العشا","l3sha","food","العشا غادي يكون متأخر","l3sha ghadi ykun met'akhar","Dinner will be late."],["restaurant","ريستورة","ristura","food","مشينا لريستورة زوينة","mshina l ristura zwina","We went to a nice restaurant."],["kitchen","الكوزينة / المطبخ","lkuzina","food","الكوزينة كبيرة فالدار","lkuzina kbira f ddar","The kitchen in the house is big."],["plate","صحن / طبسيل","tabsil","food","ضع الماكلة فالصحن","wad3 lmakla f ttabsil","Put the food on the plate."],["cup","كاس / تاسة","kas","food","عطيني كاس ديال الما","3tini kas dyal lma","Give me a glass of water."],["spoon","مغرفة / معلقة","m3elqa","food","خاصك معلقة للشربة","khassek m3elqa lshorba","You need a spoon for the soup."],["fork","فورشيطة","furshita","food","خود الفورشيطة عافاك","khud furshita 3afak","Take the fork please."],["knife","موس","mus","food","الموس حاد بزاف","lmus 7add bzzaf","The knife is very sharp."],["pot","طاجين / قدرة","qadra","food","طيب الطاجين فالقدرة","tayyeb ttajin f qadra","He cooked the tajine in the pot."],["door","باب","bab","home","سكر الباب عافاك","sekker lbab 3afak","Close the door please."],["window","شرجم","sherjem","home","حل الشرجم شوية","7el sherjem shwiya","Open the window a little."],["wall","حيط","7it","home","علق التصويرة فالحيط","3leq tsswira f l7it","Hang the picture on the wall."],["floor","أرض / لارض","lard","home","الأرض موسخة شوية","lard mwessekha shwiya","The floor is a bit dirty."],["roof","سطح","stta7","home","السطح عالي بزاف","stta7 3ali bzzaf","The roof is very high."],["room","بيت","bit","home","البيت ديالي صغير","lbit dyali sghir","My room is small."],["bedroom","بيت النوم","bit n-nawm","home","بيت النوم فيه فراش جديد","bit nnum fih frach jdid","The bedroom has a new bed."],["bathroom","بيت الما / الحمام","bit lma","home","بيت الما نظيف","bit lma nadif","The bathroom is clean."],["table","طبلة","tabla","home","ضع الكتاب فوق الطبلة","wad3 lktab fuq tabla","Put the book on the table."],["chair","كرسي / سيلا","kursi","home","قعد فالكرسي عافاك","q3ed f lkursi 3afak","Sit on the chair please."],["bed","فراش / نوم","frach","home","الفراش مزيان للنوم","lfrach mzyan lnnum","The bed is good for sleeping."],["key","ساروت","sarut","home","نسيت الساروت فالدار","nsit ssarut f ddar","I forgot the key at home."],["lock","قفل","qfel","home","سكر القفل عافاك","sekker lqfel 3afak","Lock it please."],["lamp","لمبة / لوريا","lamba","home","حل اللمبة عافاك","7el llamba 3afak","Turn on the lamp please."],["mirror","مرايا","mraya","home","شفت وجهي فالمرايا","sheft wjehi f lmraya","I saw my face in the mirror."],["phone","تيليفون / بورطابل","portable","home","عيط ليا بالتيليفون","3yyat liya b telephone","Call me on the phone."],["computer","أورديناطور / كمپيوتر","ordinateur","home","خدمت على الأورديناطور اليوم","khdemt 3la lordinateur lyum","I worked on the computer today."],["television","تيليفزيون","tlfaza","home","تفرجنا فالتيليفزيون","tfrrejna f ttlfaza","We watched television."],["radio","راديو","radio","home","سمعت الراديو فالطوموبيل","sm3et radio f ttomobil","I listened to the radio in the car."],["box","صندوق / كرطون","sanduq","home","ضع الحوايج فالصندوق","wad3 l7wayej f sanduq","Put the things in the box."],["bag","صاك / كيس","sak","home","حمل الصاك ديالك","7mel ssak dyalek","Carry your bag."],["clothes","حوايج","7wayej","home","شريت حوايج جداد","shrit 7wayej jdad","I bought new clothes."],["shirt","قميجة","qamija","home","القميجة ديالو زوينة","lqamija dyalu zwina","His shirt is nice."],["pants","سروال","serwal","home","السروال ديالي طويل","sserwal dyali twil","My pants are long."],["shoes","صباط","sebbat","home","الصباط ديالها زوين","ssebbat dyalha zwin","Her shoes are nice."],["hat","طربوش / شابو","shapu","home","لبس الشابو ديالو","lbes shapu dyalu","He wore his hat."],["money","فلوس / دراهم","flus","home","عندي بزاف ديال الفلوس","3andi bzzaf dyal lflus","I have a lot of money."],["wallet","بزطام / مكفية","mek7fiya","home","نسيت البزطام فالدار","nsit lbezdam f ddar","I forgot my wallet at home."],["pen","قلم / ستيلو","stilu","home","بغيت ستيلو جديد","bghit stilu jdid","I want a new pen."],["pencil","كريون","kreyun","home","الكريون مكسور","lkreyun mekser","The pencil is broken."],["scissors","مقص","meqass","home","خاصني المقص دابا","khassni lmeqass daba","I need scissors now."],["trash","زبل / لقمامة","zbel","home","رمى الزبل برا","rma zzbel bra","He threw the trash outside."],["soap","صابون","sabun","home","خاصني صابون جديد","khassni saboun jdid","I need new soap."],["towel","فوطة / سرويتة","futa","home","عطيني الفوطة عافاك","3tini lfuta 3afak","Give me the towel please."],["brush","شيطة / فرشاية","frashaya","home","شيت السنان بالفرشاية","shit ddenan b lfrashaya","Brush your teeth with the brush."],["mat","حصيرة / زرابية","zerbiya","home","ضع الزرابية فالبيت","wad3 zzrbiya f lbit","Put the rug in the room."],["sun","شمس","shemes","nature","الشمس سخونة بزاف اليوم","shams skhuna bzzaf lyum","The sun is very hot today."],["moon","قمر","qamar","nature","القمر باين الليلة","lqamar bayn lila","The moon is visible tonight."],["star","نجمة","njma","nature","النجمة كاتبرق فالسما","njma katberq f sma","The star is shining in the sky."],["sky","سما","sma","nature","السما زرقة اليوم","ssma zerqa lyum","The sky is blue today."],["cloud","سحاب / غمامة","ghmama","nature","الغمامة كبيرة فالسما","ghmama kbira f sma","The cloud is big in the sky."],["rain","شتا","shta","nature","الشتا غادي يجي غدا","shta ghadi yji ghedda","Rain will come tomorrow."],["snow","تلج","telj","nature","التلج طاح البارح","telj ta7 lbare7","Snow fell yesterday."],["wind","ريح","ri7","nature","الريح قوية اليوم","ri7 qwiya lyum","The wind is strong today."],["storm","عاصفة","3asifa","nature","العاصفة جات بزربة","3asifa jat bzerba","The storm came quickly."],["thunder","رعد","ra3d","nature","سمعت الرعد فالليل","sm3et ra3d f llil","I heard thunder at night."],["lightning","برق","berq","nature","البرق ضرب الشجرة","lberq dareb shejra","Lightning struck the tree."],["fire","النار","nnar","nature","النار كبيرة فالطباخة","nnar kbira f ttabakha","The fire is big in the stove."],["ice","تلج / كلاص","telj","nature","التلج تحول لكلاص","telj th0wel l kalas","The snow turned to ice."],["hot","سخون","skhun","nature","الماكلة سخونة بزاف","lmakla skhuna bzzaf","The food is very hot."],["warm","دافي","dafi","nature","الجو دافي اليوم","ljaw dafi lyum","The weather is warm today."],["cool","بارد شوية","bared shwiya","nature","الريح باردة شوية","ri7 barda shwiya","The wind is a bit cool."],["forest","غابة","ghaba","nature","الغابة كبيرة بزاف","lghaba kbira bzzaf","The forest is very big."],["desert","صحرا","sa7ra","nature","الصحرا كبيرة فالمغرب","sa7ra kbira f lmaghrib","The desert is big in Morocco."],["beach","بحر / لپلاج","plaj","nature","مشينا للپلاج البارح","mshina lplaj lbare7","We went to the beach yesterday."],["island","جزيرة","jazira","nature","الجزيرة زوينة بزاف","jazira zwina bzzaf","The island is very beautiful."],["valley","وادي","wad","nature","الوادي عميق بزاف","lwad 3amiq bzzaf","The valley is very deep."],["hill","هضبة / تلة","tella","nature","طلعنا فوق التلة","tla3na fuq ttella","We climbed up the hill."],["rock","صخرة / حجرة","7ajra","nature","الحجرة كبيرة فالطريق","l7ajra kbira f ttriq","The rock is big on the road."],["sand","رمل","remla","nature","الرمل سخون بزاف","remla skhuna bzzaf","The sand is very hot."],["grass","حشيش / لكلا","lkla","nature","الحشيش خضر بزاف","lkla khder bzzaf","The grass is very green."],["flower","نوارة / وردة","nwara","nature","النوارة زوينة بزاف","nwara zwina bzzaf","The flower is very beautiful."],["leaf","ورقة الشجرة","warqat shejra","nature","الورقة طاحت من الشجرة","lwarqa ta7et men shejra","The leaf fell from the tree."],["root","عرق / جذر","3erq","nature","عرق الشجرة عميق","3erq shejra 3amiq","The tree's root is deep."],["seed","زريعة / حبة","zri3a","nature","غرست الزريعة فالأرض","ghrest zzri3a f lard","I planted the seed in the ground."],["garden","جنان","jnan","nature","الجنان فيه بزاف ديال النوار","ljnan fih bzzaf dyal nnwar","The garden has lots of flowers."],["field","فدان / حقل","fddan","nature","الفدان كبير بزاف","fddan kbir bzzaf","The field is very big."],["farm","فيرما / عزيب","ferma","nature","الفيرما ديالنا قديمة","lferma dyalna qdima","Our farm is old."],["wood","خشب / عود","khshab","nature","الطبلة مصنوعة من الخشب","ttabla masnu3a men lkhshab","The table is made of wood."],["metal","حديد / معدن","7did","nature","الباب مصنوع من الحديد","lbab masnu3 men l7did","The door is made of metal."],["stone","حجرة","7ajra","nature","الحيط مبني بالحجرة","l7it mebni b l7ajra","The wall is built with stone."],["glass","جاج / زجاج","jaj","nature","الشرجم مصنوع من الجاج","sherjem masnu3 men jaj","The window is made of glass."],["gold","دهب","dheb","nature","الخاتم ديالها من الدهب","lkhatem dyalha men ddheb","Her ring is made of gold."],["silver","فضة / نقرة","neqra","nature","الحلي ديالها من النقرة","l7li dyalha men neqra","Her jewelry is made of silver."],["red","حمر","7mer","colors","القميجة حمراء","lqamija 7amra","The shirt is red."],["blue","زرق","zreq","colors","السما زرقة","ssma zerqa","The sky is blue."],["green","خضر","khder","colors","الحشيش خضر","lkla khder","The grass is green."],["yellow","صفر","sfer","colors","الشمس صفرة فالتصويرة","shams sefra f tsswira","The sun is yellow in the picture."],["black","كحل","k7el","colors","الصباط بيض","ssebbat byed","The shoes are white."],["brown","قهوي / بني","qahwi","colors","الكسوة قهوية","lkeswa qahwiya","The dress is brown."],["pink","روز / وردي","rose","colors","اللون روز زوين","llun rose zwin","The pink color is nice."],["purple","بنفسجي / موڤ","mauve","colors","الحيط مصبوغ بنفسجي","l7it musba8 mauve","The wall is painted purple."],["gray","رمادي / كزيس","grizi","colors","السيارة رمادية","ssayara grizia","The car is gray."],["beautiful","زوين / شهي","zwin","colors","المدينة زوينة بزاف","lmdina zwina bzzaf","The city is very beautiful."],["ugly","خايب","khayb","colors","هاد الحذا خايب","had l7eda khayb","This shoe is ugly."],["happy","فرحان","fer7an","colors","راه فرحان بزاف اليوم","rah fer7an bzzaf lyum","He is very happy today."],["sad","حزين / غمّان","hzin","colors","هي حزينة من البارح","hiya 7zina men lbare7","She has been sad since yesterday."],["angry","غضبان / زعفان","z3fan","colors","غضبان عليه بزاف","z3fan 3lih bzzaf","I am very angry at him."],["scared","خايف","khayf","colors","خايف من الكلب","khayf men lkelb","He is scared of the dog."],["surprised","مفجوء / مستغرب","mufaj'a","colors","مفجوء من الخبر","mufaj'a men lkhbar","He was surprised by the news."],["bored","مقلق","mqelleq","colors","مقلق فالدار اليوم","mqelleq f ddar lyum","He is bored at home today."],["excited","فرحان بزاف","fer7an bzzaf","colors","فرحان بزاف بهاد الخبر","fer7an bzzaf b had lkhbar","He is very excited about this news."],["worried","خايف / متهيل","metheyel","colors","متهيل على الإمتحان","metheyel 3la limti7an","He is worried about the exam."],["calm","هادي","hadi","colors","راه هادي دابا","rah hadi daba","He is calm now."],["brave","شجاع / فحل","fa7el","colors","هو فحل بزاف","huwa fa7el bzzaf","He is very brave."],["smart","ذكي / فهيم","fhim","colors","هي فهيمة بزاف فالقسم","hiya fhima bzzaf f lqism","She is very smart in class."],["stupid","بهيم / حمق","be7im","colors","ما تكونش بهيم","ma tkunsh be7im","Don't be stupid."],["lazy","عزّاب / كسلان","3azzab","colors","هو عزّاب بزاف فالخدمة","huwa 3azzab bzzaf f lkhedma","He is very lazy at work."],["active","متحرك / نشيط","nashit","colors","هي نشيطة بزاف","hiya nashita bzzaf","She is very active."],["rich","غني / مليونير","ghani","colors","هو غني بزاف دابا","huwa ghani bzzaf daba","He is very rich now."],["poor","فقير / مسكين","miskin","colors","هما مساكين بزاف","huma miskinin bzzaf","They are very poor."],["easy","سهل","se7el","colors","هاد الدرس سهل","had ddars se7el","This lesson is easy."],["difficult","صعيب","s3ib","colors","هاد الإمتحان صعيب بزاف","had limti7an s3ib bzzaf","This exam is very difficult."],["clean","نقي / طاهر","nqi","colors","البيت نظيف دابا","lbit nadif daba","The room is clean now."],["dirty","موسخ / خايب","mwessekh","colors","الطريق موسخة بزاف","ttriq mwessekha bzzaf","The road is very dirty."],["fast","سريع / فيف","sri3","colors","السيارة سريعة بزاف","ssayara sri3a bzzaf","The car is very fast."],["slow","بطيء / بشويا","be8i","colors","هو بطيء فالخدمة","huwa be8i f lkhedma","He is slow at work."],["loud","عالي","3ali","colors","الموسيقى صوتها عالي","lmusiqa sutha 3ali","The music is loud."],["quiet","ساكت / هادي","saket","colors","القسم ساكت دابا","lqism saket daba","The classroom is quiet now."],["heavy","تقيل","tqil","colors","الصندوق تقيل بزاف","ssanduq tqil bzzaf","The box is very heavy."],["expensive","غالي","ghali","colors","هاد الكسوة غالية بزاف","had lkeswa ghalia bzzaf","This dress is very expensive."],["cheap","رخيص","rkhis","colors","هاد الكتاب رخيص","had lktab rkhis","This book is cheap."],["full","عامر / فاصل","3amer","colors","الصحن عامر بالماكلة","ttabsil 3amer b lmakla","The plate is full of food."],["empty","فاضي / خاوي","fadi","colors","الكاس فاضي دابا","lkas fadi daba","The glass is empty now."],["wet","مبلل","mballal","colors","الحوايج مبللة بالما","l7wayej mballala b lma","The clothes are wet from water."],["dry","ناشف","nashef","colors","الحوايج ناشفة دابا","l7wayej nashfa daba","The clothes are dry now."],["safe","أمن / سالم","salem","colors","هاد الطريق سالم","had ttriq salem","This road is safe."],["dangerous","خطير","khatir","colors","هاد الحيوان خطير بزاف","had l7ayawan khatir bzzaf","This animal is very dangerous."],["jump","نطّ","natt","verbs","نط فوق الحبل","natt fuq l7bel","He jumped over the rope."],["sit","قعد / تقعد","qa3ed","verbs","قعد فالكرسي عافاك","q3ed f lkursi 3afak","Sit on the chair please."],["stand","وقف","weqef","verbs","وقف ورا الباب","weqef wra lbab","He stood behind the door."],["fall","هوا / طاح","tah","verbs","طاح من فوق السلم","tah men fuq sellam","He fell from the ladder."],["climb","طلع","tla3","verbs","طلع فوق الجبل","tla3 fuq jbel","He climbed up the mountain."],["swim","عام","3am","verbs","عام فالبحر اليوم","3am f lb7ar lyum","He swam in the sea today."],["fly","طار","tar","verbs","الطيارة طارت فالسما","ttyara taret f sma","The plane flew in the sky."],["drive","سوّق","sawweq","verbs","سوّق السيارة بزربة","sawweq ssayara bzerba","He drove the car quickly."],["ride","ركب","rkeb","verbs","","",""],["push","دفع","dfe3","verbs","","",""],["pull","جبد","jbed","verbs","","",""],["throw","رمى","rma","verbs","","",""],["catch","شد / لقط","shedd","verbs","","",""],["hold","شد","shedd","verbs","","",""],["drop","هوّد / طيّح","tayye7","verbs","","",""],["break","كسّر","kesser","verbs","","",""],["fix","صوّب / رپاري","swweb","verbs","","",""],["build","بنا","bna","verbs","","",""],["buy","شرى","shra","verbs","","",""],["sell","باع","ba3","verbs","","",""],["pay","خلص","khalles","verbs","","",""],["borrow","سلف","self","verbs","","",""],["lend","سلف","self","verbs","","",""],["spend","صرف","sref","verbs","","",""],["save","وفّر / حافظ","wefer","verbs","","",""],["wash","صبّن / غسل","saben","verbs","","",""],["cook","طيّب","tayyeb","verbs","","",""],["bake","خبز","khbez","verbs","","",""],["fill","عمّر","3ammer","verbs","","",""],["send","صيفط","saifet","verbs","","",""],["receive","توصّل","twssel","verbs","","",""],["bring","جيب","jib","verbs","","",""],["wait","تسنّى","tsenna","verbs","","",""],["hurry","زربي / تزربو","zerbi","verbs","","",""],["travel","سافر","safer","verbs","","",""],["arrive","وصل","wsel","verbs","","",""],["return","رجع","rje3","verbs","","",""],["stay","بقى","bqa","verbs","","",""],["visit","زار","zar","verbs","","",""],["meet","تلاقى / لاقى","laqa","verbs","","",""],["greet","سلّم","sellem","verbs","","",""],["invite","عزّم","3azzem","verbs","","",""],["agree","وافق / مساوي","wafeq","verbs","","",""],["disagree","ما وافقش","ma wafeqsh","verbs","","",""],["argue","هضر بزربة / تخانق","tkhanaq","verbs","","",""],["fight","تقاتل / تشاجر","tqatel","verbs","","",""],["laugh","ضحك","d7ek","verbs","","",""],["cry","بكى","bka","verbs","","",""],["smile","بسم / تبسّم","btassem","verbs","","",""],["shout","عيط / صرّخ","3yyat","verbs","","",""],["whisper","هضر بالغصة / فهامس","hams","verbs","","",""],["sing","غنّى","ghenna","verbs","","",""],["dance","شطح / رقص","shte7","verbs","","",""],["draw","رسم","rsem","verbs","","",""],["paint","صبّغ / لوّن","lawwen","verbs","","",""],["count","قرا / عدّ","3edd","verbs","","",""],["measure","قاس","qas","verbs","","",""],["weigh","وزن","wzen","verbs","","",""],["teach","علّم","3llem","verbs","","",""],["understand","فهم","fhem","verbs","","",""],["explain","فسّر / شرح","fesser","verbs","","",""],["remember","تفكّر","tfekker","verbs","","",""],["forget","نسى","nsa","verbs","","",""],["imagine","تخيّل / صوّر فبالو","tkhayyel","verbs","","",""],["dream","حلم","7lem","verbs","","",""],["hope","تمنّى","tmenna","verbs","","",""],["wish","تمنّى / بغى","tmenna","verbs","","",""],["believe","صدّق / مصدّق","saddeq","verbs","","",""],["doubt","تشكّك / ماشي متاكد","tshekkek","verbs","","",""],["decide","قرّر","qarrer","verbs","","",""],["choose","ختار","khtar","verbs","","",""],["plan","خطّط / برمج","khattat","verbs","","",""],["prepare","وجّد / حضّر","wajjed","verbs","","",""],["finish","سالا / كمّل","salaw","verbs","","",""],["continue","كمّل / تابع","kammel","verbs","","",""],["repeat","عاود","3awed","verbs","","",""],["succeed","ربح / نجح","nje7","verbs","","",""],["fail","فشل / سقط","fshel","verbs","","",""],["win","ربح / غلب","rbe7","verbs","","",""],["lose","خسر / غلب فيه","khser","verbs","","",""],["compete","تباري / تنافس","tbara","verbs","","",""],["share","قاسم / تقاسم","qassem","verbs","","",""],["steal","سرق / شدّ","sreq","verbs","","",""],["hide","خبّى","khebba","verbs","","",""],["search","قلّب / بحث","qelleb","verbs","","",""],["discover","كشف / لقا","kshef","verbs","","",""],["create","صنع / خلق","sna3","verbs","","",""],["destroy","خرّب / دمّر","kherreb","verbs","","",""],["protect","حمى / حافظ","7ma","verbs","","",""],["attack","هجم / ضرب","hjem","verbs","","",""],["defend","دافع / حامي","dafe3","verbs","","",""],["escape","هرب / فرّ","hreb","verbs","","",""],["chase","تبع / جري ورا","tba3","verbs","","",""],["guide","ورّى / دلّل","werra","verbs","","",""],["lead","قاد / مشى قدّام","qad","verbs","","",""],["control","تحكّم / كنترولا","tahakkem","verbs","","",""],["manage","دبّر","debber","verbs","","",""],["organize","نظّم / رتّب","nadhem","verbs","","",""],["solve","حلّ","7all","verbs","","",""],["calculate","حسب","7seb","verbs","","",""],["compare","قارن / شبّه","qaren","verbs","","",""],["connect","ربط / كونيكتي","rbet","verbs","","",""],["separate","فرّق / فصل","ferreq","verbs","","",""],["combine","جمع / مزج","jma3","verbs","","",""],["mix","خلط / مزج","khlet","verbs","","",""],["subtract","نقّص / طرح","neqqes","verbs","","",""],["multiply","ضرب","dareb","verbs","","",""],["divide","قسّم","qassem","verbs","","",""],["street","زنقة / شارع","zenqa","places","","",""],["road","طريق","triq","places","","",""],["bridge","قنطرة","qantra","places","","",""],["market","سوق","suq","places","","",""],["store","محل / حانوت","7anut","places","","",""],["bank","بانكا / البنك","banka","places","","",""],["park","حديقة / پارك","park","places","","",""],["airport","المطار","lmtar","places","","",""],["station","المحطة / لاكار","lagar","places","","",""],["hotel","أوطيل / فندق","otel","places","","",""],["office","بورو / مكتب","biru","places","","",""],["factory","معمل","ma3mal","places","","",""],["church","كنيسة","knisa","places","","",""],["mosque","مسجد / جامع","jame3","places","","",""],["library","مكتبة / لابلوتيك","maktaba","places","","",""],["museum","متحف / موزي","musi","places","","",""],["border","حدود","7dud","places","","",""],["capital","العاصمة","l3assima","places","","",""],["village","دوار / قرية","duwwar","places","","",""],["neighborhood","حومة","7uma","places","","",""],["corner","كوينة / زاوية","kwina","places","","",""],["center","وسط / سونطر","west","places","","",""],["edge","حافة / طرف","7affa","places","","",""],["entrance","باب / مدخل","madkhal","places","","",""],["exit","خروج / سورتي","khruj","places","","",""],["building","بناية","bnaya","places","","",""],["apartment","شقة","shqqa","places","","",""],["yard","ساحة / دار","sa7a","places","","",""],["fence","حيط / سياج","swija","places","","",""],["address","عنوان","3unwan","places","","",""],["class","قسم / حصة","qism","school","","",""],["lesson","درس","ders","school","","",""],["homework","ديفوار / واجب","diwwar","school","","",""],["exam","إمتحان","imti7an","school","","",""],["grade","نوطة / علامة","nota","school","","",""],["subject","ماطيير / مادة","matyer","school","","",""],["desk","طبلة / مكتب","tabla","school","","",""],["pencil case","محفظة القلام","ma7fada","school","","",""],["notebook","كناش / كارني","kunnash","school","","",""],["question","سؤال","su'al","school","","",""],["test","إمتحان / تيست","test","school","","",""],["degree","شهادة / ديپلوم","diplom","school","","",""],["university","جامعة","jami3a","school","","",""],["course","كور / حصة","kurs","school","","",""],["job","خدمة","khedma","school","","",""],["salary","خدمة / لاباي","paie","school","","",""],["meeting","ميتينگ / جلسة","jles","school","","",""],["project","بروجي / مشروع","proje","school","","",""],["company","شركة","sharika","school","","",""],["business","تجارة / بيزنس","tijara","school","","",""],["contract","كونطرا / عقد","3aqd","school","","",""],["customer","كليان / حريف","client","school","","",""],["manager","موديري / مسؤول","mudir","school","","",""],["employee","موظف / خدّام","khaddam","school","","",""],["interview","إنترفيو / مقابلة","muqabala","school","","",""],["application","طلب / دومون","talab","school","","",""],["resume","السي في","cv","school","","",""],["skill","خبرة / مهارة","khebra","school","","",""],["experience","خبرة / تجربة","khebra","school","","",""],["training","تكوين / فورماسيون","formasyu","school","","",""],["bus","طوبيس","tobis","transport","","",""],["train","تران","tran","transport","","",""],["plane","طيارة","tyara","transport","","",""],["boat","فلوكة / باطو","felluka","transport","","",""],["ship","باطو كبير","bato","transport","","",""],["bicycle","بيسكليط / فيلو","bisklit","transport","","",""],["motorcycle","موطور","motor","transport","","",""],["taxi","طاكسي","taksi","transport","","",""],["truck","كاميون","kamiyu","transport","","",""],["ticket","بيي / تيكي","biye","transport","","",""],["gas","إسانس / گاز","essence","transport","","",""],["traffic","زحمة / سيركولاسيون","z7ma","transport","","",""],["license","پيرمي / رخصة","permis","transport","","",""],["engine","موطور / المحرك","motor","transport","","",""],["wheel","روطة / عجلة","ruwwita","transport","","",""],["seat","بلاصة / سيج","blasa","transport","","",""],["speed","سرعة / فيتيسة","sor3a","transport","","",""],["map","خريطة / كارط","kartta","transport","","",""],["direction","إتجاه / سانس","ittijah","transport","","",""],["journey","سفر / تريق","safar","transport","","",""],["love","محبة / لوف","mahabba","abstract","","",""],["hate","كره / حقد","kreh","abstract","","",""],["fear","خوف","khof","abstract","","",""],["trust","ثقة","tiqa","abstract","","",""],["respect","حشمة / احترام","i7tiram","abstract","","",""],["freedom","حرية","7orriya","abstract","","",""],["peace","سلام / سكينة","salam","abstract","","",""],["war","حرب","7arb","abstract","","",""],["truth","صح / الحقيقة","l7aqiqa","abstract","","",""],["lie","كذبة","keddba","abstract","","",""],["secret","سر","serr","abstract","","",""],["problem","مشكل","moshkil","abstract","","",""],["solution","حل","7all","abstract","","",""],["opinion","رأي","ra'i","abstract","","",""],["fact","حقيقة / واقعة","7aqiqa","abstract","","",""],["reason","سبب / علاش","sabab","abstract","","",""],["purpose","غاية / هدف","hadaf","abstract","","",""],["goal","هدف","hadaf","abstract","","",""],["memory","ذكرى / فكرة","dikra","abstract","","",""],["knowledge","معرفة / علم","m3arifa","abstract","","",""],["wisdom","حكمة","7ikma","abstract","","",""],["emotion","شعور / حالة نفسية","shu3ur","abstract","","",""],["feeling","شعور / حسّ","shu3ur","abstract","","",""],["mood","مزاج","mizaj","abstract","","",""],["attitude","طبيعة / تصرف","tasarruf","abstract","","",""],["behavior","سلوك / تصرف","suluk","abstract","","",""],["personality","شخصية","shakhsiya","abstract","","",""],["character","طابع / كاراكتير","tab3","abstract","","",""],["value","قيمة","qima","abstract","","",""],["belief","عقيدة / ايمان","3aqida","abstract","","",""],["religion","الدين","ddin","abstract","","",""],["culture","ثقافة / كولتير","thaqafa","abstract","","",""],["tradition","تقليد / عادة","3ada","abstract","","",""],["custom","عادة","3ada","abstract","","",""],["history","تاريخ","tarikh","abstract","","",""],["society","المجتمع","moujtama3","abstract","","",""],["community","جماعة / مجتمع","jama3a","abstract","","",""],["government","حكومة","7ukuma","abstract","","",""],["law","قانون","qanun","abstract","","",""],["justice","العدل","l3adl","abstract","","",""],["crime","جريمة","jarima","abstract","","",""],["rule","قاعدة / قانون","qa3ida","abstract","","",""],["system","نظام / سيستيم","nidham","abstract","","",""],["level","مستوى / نيفو","mustawa","abstract","","",""],["quality","جودة / كواليتي","jawda","abstract","","",""],["quantity","كمية","kammiya","abstract","","",""],["amount","مبلغ / كمية","mablagh","abstract","","",""],["size","قد / طاي","qedd","abstract","","",""],["shape","شكل","shekl","abstract","","",""],["type","نوع","no3","abstract","","",""],["category","فئة / كاتيگوري","fi'a","abstract","","",""],["style","ستيل / طريقة","style","abstract","","",""],["pattern","نموذج / موديل","namudaj","abstract","","",""],["internet","الأنترنت","lintirnit","tech","","",""],["website","سيت / موقع","site","tech","","",""],["email","إيمايل / البريد","imayl","tech","","",""],["password","موط دو پاس / الكود","code","tech","","",""],["screen","شاشة / إيكران","shasha","tech","","",""],["battery","بطرية","batriya","tech","","",""],["charger","شارجور","sharjur","tech","","",""],["camera","كامیرا","kamira","tech","","",""],["video","فيديو","vidyu","tech","","",""],["file","ملف / فيشي","fishi","tech","","",""],["download","تيليشارجي","telecharji","tech","","",""],["software","برنامج / لوجيسيال","logisyel","tech","","",""],["app","تطبيق / أپليكاسيون","application","tech","","",""],["network","شبكة / ريزو","rizo","tech","","",""],["signal","سينيال / إشارة","signal","tech","","",""],["message","ميساج / رسالة","message","tech","","",""],["button","بوطون / زر","buton","tech","","",""],["game","لعبة","l3ba","tech","","",""],["ball","كورة","kura","tech","","",""],["sport","رياضة / سپور","riyada","leisure","","",""],["football","كرة القدم","kurat lqdm","leisure","","",""],["race","كورس / سباق","siba9","leisure","","",""],["prize","جايزة / برمي","premi","leisure","","",""],["party","حفلة / سهرة","7afla","leisure","","",""],["holiday","عطلة / فاكونص","3otla","leisure","","",""],["vacation","عطلة","3otla","leisure","","",""],["trip","سفرة / فوياج","safra","leisure","","",""],["hobby","هواية","hiwaya","leisure","","",""],["toy","لوبة / لعبة","l3ba","leisure","","",""],["movie","فيلم","film","leisure","","",""],["photo","تصويرة / صورة","tswira","leisure","","",""],["joke","نكتة / تحضير","nokta","leisure","","",""],["fun","مزية / تفركيس","fun","leisure","","",""],["possible","ممكن","mumkin","leisure","","",""],["impossible","ماشي ممكن","ma mumkin sh","leisure","","",""],["certain","متأكد","met'akked","leisure","","",""],["similar","مشابه / بحال","mutashabih","leisure","","",""],["specific","محدد / دقيق","mu7addad","leisure","","",""],["general","عام","3am","leisure","","",""],["normal","نورمال / عادي","3adi","leisure","","",""],["strange","غريب","ghrib","leisure","","",""],["usual","عادي","3adi","leisure","","",""],["rare","نادر / قليل","nader","leisure","","",""],["common","شائع / دارج","darej","leisure","","",""],["private","خاص","khass","descriptive","","",""],["public","عمومي","3umumi","descriptive","","",""],["personal","شخصي","shakhsi","descriptive","","",""],["local","محلي / ديال البلاد","li7awi","descriptive","","",""],["foreign","أجنبي / من برا","ajnabi","descriptive","","",""],["national","وطني","watani","descriptive","","",""],["modern","موديرن / عصري","3asri","descriptive","","",""],["ancient","قديم بزاف","qadim bzzaf","descriptive","","",""],["traditional","تقليدي","taqlidi","descriptive","","",""],["natural","طبيعي","tabi3i","descriptive","","",""],["artificial","مصنوع / صناعي","sina3i","descriptive","","",""],["real","حقيقي / واقعي","7aqiqi","descriptive","","",""],["fake","مزور / تقليد","mzawwer","descriptive","","",""],["true","صحيح","sa7i7","descriptive","","",""],["false","غلط / كاذب","ghalat","descriptive","","",""],["correct","صحيح","sa7i7","descriptive","","",""],["wrong","غالط","ghaled","descriptive","","",""],["complete","كامل","kamel","descriptive","","",""],["incomplete","ماشي كامل","ma kamelsh","descriptive","","",""],["perfect","كامل / ممتاز","perfe","descriptive","","",""],["simple","بسيط / سهل","basit","descriptive","","",""],["complex","معقد / كومپليكي","mu3aqqad","descriptive","","",""],["clear","واضح / كلير","wade7","descriptive","","",""],["confusing","مخربق","mkharbeq","descriptive","","",""],["obvious","واضح بزاف","wade7 bzzaf","descriptive","","",""],["hidden","خبي / مخبي","mkhebbi","descriptive","","",""],["visible","ظاهر / باين","baayn","descriptive","","",""],["invisible","ماشي باين","ma baaynsh","descriptive","","",""],["free","حر / فري","7or","descriptive","","",""],["busy","مشغول / مزحوم","mash8ul","descriptive","","",""],["available","كاين / ديسپونيبل","kayn","descriptive","","",""],["ready","واجد / حاضر","wajed","descriptive","","",""],["necessary","ضروري / واجب","daruri","descriptive","","",""],["optional","إختياري","ikhtiyari","descriptive","","",""],["equal","بحال / كيف كيف","kif kif","descriptive","","",""],["various","مختلفين / متنوعين","mokhtalfin","descriptive","","",""],["single","وحيد / واحد","wa7id","descriptive","","",""],["double","ديال جوج","dyal juj","descriptive","","",""],["entire","كامل / كله","kollu","descriptive","","",""],["partial","جزئي / شوية منه","joz'i","descriptive","","",""],["extra","زيادة / إكسطرا","ziyada","descriptive","","",""],["additional","إضافي / زيادة","idafi","descriptive","","",""],["main","أساسي / كبير","asasi","descriptive","","",""],["minor","صغير / ثانوي","thanawi","descriptive","","",""],["major","كبير / مهم","kbir","descriptive","","",""],["central","وسطي / مركزي","markazi","descriptive","","",""],["global","عالمي","3alami","descriptive","","",""],["urban","حضري / ديال المدينة","7adari","descriptive","","",""],["rural","قروي / ديال البادية","qarawi","descriptive","","",""],["information","معلومة / إنفو","ma3luma","descriptive","","",""],["news","أخبار","akhbar","descriptive","","",""],["advice","نصيحة","nasi7a","descriptive","","",""],["warning","تحذير / تنبيه","ta7dir","descriptive","","",""],["permission","سماح / ترخيص","tara7is","descriptive","","",""],["promise","وعد","wa3d","descriptive","","",""],["agreement","اتفاق","ittifaq","descriptive","","",""],["decision","قرار","qarar","descriptive","","",""],["choice","إختيار","ikhtiyar","descriptive","","",""],["opportunity","فرصة / أوكازيون","forsa","descriptive","","",""],["challenge","تحدي","ta7addi","descriptive","","",""],["risk","خطر / ريسك","khatar","descriptive","","",""],["benefit","فايدة","fayda","descriptive","","",""],["advantage","فايدة / أفونطاج","avantaj","descriptive","","",""],["disadvantage","عيب / إنكونفينيان","3ayb","descriptive","","",""],["effect","نتيجة / تأثير","ta'thir","misc","","",""],["cause","سبب","sabab","misc","","",""],["result","نتيجة","natija","misc","","",""],["process","مسار / مسلسل","masar","misc","","",""],["method","طريقة / ميتود","tariqa","misc","","",""],["technique","تقنية / طريقة","taqniya","misc","","",""],["tool","آلة / أدات","adat","misc","","",""],["equipment","معدات / أتيراج","mu3iddat","misc","","",""],["material","مادة","madda","misc","","",""],["resource","موارد / ريسورس","mawared","misc","","",""],["energy","طاقة / إنيرجي","taqa","misc","","",""],["power","قوة / سلطة","qowwa","misc","","",""],["strength","قوة","qowwa","misc","","",""],["weakness","ضعف","do3f","misc","","",""],["ability","قدرة","qudra","misc","","",""],["talent","موهبة / تالون","mawhiba","misc","","",""],["effort","مجهود / جهد","majhud","misc","","",""],["attempt","محاولة / تيسا","mu7awala","misc","","",""],["success","نجاح","naja7","misc","","",""],["failure","فشل / فايلير","fashal","misc","","",""],["progress","تقدم / تطور","taqaddum","misc","","",""],["development","تطور / ديفلوپمان","tatawwur","misc","","",""],["growth","نمو / زيادة","numuww","misc","","",""],["increase","زيادة","ziyada","misc","","",""],["decrease","نقصان / تراجع","naqsan","misc","","",""],["difference","فرق / إختلاف","farq","misc","","",""],["similarity","تشابه","tashabuh","misc","","",""],["connection","علاقة / رابط","3alaqa","misc","","",""],["relationship","علاقة","3alaqa","misc","","",""],["communication","تواصل / كوميونيكاسيون","tawasul","misc","","",""],["conversation","محادثة / دردشة","mu7adatha","misc","","",""],["discussion","نقاش / مناقشة","niqash","misc","","",""],["argument","خناقة / نقاش حاد","khna9a","misc","","",""],["conflict","صراع / مشكل","siraa3","misc","","",""],["cooperation","تعاون","ta3awun","misc","","",""],["support","دعم / مساعدة","da3m","misc","","",""],["encouragement","تشجيع","tashji3","misc","","",""],["criticism","إنتقاد","intiqad","misc","","",""],["praise","إشادة / تشجيع","ishada","misc","","",""],["complaint","شكاية","shikaya","misc","","",""],["request","طلب","talab","misc","","",""],["offer","عرض","3ard","misc","","",""],["demand","طلب / مطلب","matlab","misc","","",""],["supply","تموين / عرض","tamwin","misc","","",""],["price","سعر / تمن","taman","misc","","",""],["cost","كلفة / تكلفة","kulfa","misc","","",""],["worth","يستحق / قيمة","qima","misc","","",""],["profit","ربح / مكسب","rib7","misc","","",""],["loss","خسارة","khasara","misc","","",""],["budget","ميزانية / بودجي","budji","misc","","",""],["debt","دين","deyn","misc","","",""],["loan","قرض / كريدي","qard","misc","","",""],["tax","ضريبة / تاكس","darriba","misc","","",""],["birthday","عيد الميلاد","3id lmilad","misc","","",""],["wedding","عرس","3ers","misc","","",""],["gift","هدية","hadya","misc","","",""],["celebration","احتفال / فرح","i7tifal","misc","","",""],["nightmare","كابوس","kabus","misc","","",""],["patience","صبر","sber","misc","","",""],["question mark","علامة الإستفهام","3alamat listifham","advanced","","",""],["alphabet","الحروف / الأبجدية","le7ruf","advanced","","",""],["vowel","حرف متحرك","7arf met7arrek","advanced","","",""],["paragraph","فقرة","faqra","advanced","","",""],["chapter","فصل / شابيتر","fasl","advanced","","",""],["title","عنوان","3unwan","advanced","","",""],["author","كاتب","katib","advanced","","",""],["translation","ترجمة","tarjama","advanced","","",""],["language","لغة","lugha","advanced","","",""],["grammar","قواعد / گرامير","qawa3id","advanced","","",""],["vocabulary","مفردات / كلمات","kalimat","advanced","","",""],["spelling","تهجية","tahjiya","advanced","","",""],["pronunciation","نطق / تلفظ","lafd","advanced","","",""],["accent","لهجة","lahja","advanced","","",""],["dialect","لهجة","lahja","advanced","","",""],["meaning","معنى","ma3na","advanced","","",""],["definition","تعريف","ta3rif","advanced","","",""],["symbol","رمز / علامة","ramz","advanced","","",""],["sign","علامة / إشارة","3alama","advanced","","",""],["label","تيكيتة / ملصقة","tikita","advanced","","",""],["brand","ماركة","marka","advanced","","",""],["logo","لوگو","logo","advanced","","",""],["advertisement","إعلان / بوبليسيتي","i3lan","advanced","","",""],["magazine","مجلة","majalla","advanced","","",""],["newspaper","جريدة","jarida","advanced","","",""],["article","مقال","maqal","advanced","","",""],["report","تقرير / رابور","taqrir","advanced","","",""],["document","وثيقة / دوكيمو","watiqa","advanced","","",""],["certificate","شهادة","shahada","advanced","","",""],["signature","توقيع / سينياتير","tawqi3","advanced","","",""],["stamp","طابع / طمبر","tabe3","advanced","","",""],["envelope","ظرف / لانفلوپ","darf","advanced","","",""],["package","طرد / كولي","tard","advanced","","",""],["delivery","توصيل / ليفريزو","tawsil","advanced","","",""],["warehouse","مستودع / ديپو","mustawda3","advanced","","",""],["inventory","مخزون / ستوك","stok","advanced","","",""],["supplier","مزوّد / فورنيسور","muzawwid","advanced","","",""],["invoice","فاكتورة / فاتورة","faktura","advanced","","",""],["receipt","وصل / تيكي","wasl","advanced","","",""],["discount","تخفيض / سولد","takhfid","advanced","","",""],["warranty","ضمانة / گارانتي","damana","advanced","","",""],["refund","إرجاع الفلوس / رومبورسمان","irja3 lflus","advanced","","",""],["feedback","ملاحظات / فيدباك","mula7adat","advanced","","",""],["survey","إستطلاع / سوندا","sundaj","advanced","","",""],["statistics","إحصائيات / ستاتيستيك","i7sa'iyat","advanced","","",""],["percentage","نسبة المية / پورسا","nisba","advanced","","",""],["average","معدل / معدّل","mu3addal","advanced","","",""],["total","المجموع / توتال","majmu3","advanced","","",""],["balance","توازن / بالانس","tawazun","advanced","","",""],["investment","إستثمار / إنفيستيسمان","isti'thmar","advanced","","",""],["interest","فائدة (مالية)","fa'ida","advanced","","",""],["currency","عملة","3umla","advanced","","",""],["exchange","صرف / تبديل","saref","advanced","","",""],["cash","كاش / فلوس نقدية","kash","advanced","","",""],["credit","كريدي / دين","credit","advanced","","",""],["account","حساب / كومت","7isab","advanced","","",""],["transaction","معاملة / تعامل","mu3amala","advanced","","",""],["deposit","إيداع / فيرسمو","ida3","advanced","","",""],["withdrawal","سحب الفلوس / روتري","sa7b","advanced","","",""],["appointment","موعد / رونديفو","maw3id","advanced","","",""],["schedule","برنامج / جدول الوقت","barnamaj","advanced","","",""],["deadline","آخر أجل / ديلاي","akher ajal","advanced","","",""],["reminder","تذكير / رابيل","tadkir","advanced","","",""],["notification","إشعار / نوتيفيكاسيون","ish3ar","advanced","","",""],["update","تحديث / ميزاجور","ta7dith","advanced","","",""],["version","نسخة / فيرسيو","nuskha","advanced","","",""],["feature","خاصية / فونكسيو","khasiya","advanced","","",""],["setting","إعداد / ريگلاج","i3dad","advanced","","",""],["option","إختيار / أوپسيو","ikhtiyar","advanced","","",""],["default","الإفتراضي / ديفو","iftiradi","advanced","","",""],["error","خطأ / غلطة","khata'","advanced","","",""],["mistake","غلطة","ghalta","advanced","","",""],["correction","تصحيح / كوريكسيو","tas7i7","advanced","","",""],["improvement","تحسين / أميليوراسيو","ta7sin","advanced","","",""],["upgrade","ترقية / أپگريد","tarqiya","advanced","","",""],["backup","نسخة احتياطية / سوفيگارد","sauvegarde","advanced","","",""],["storage","تخزين / ستوكاج","takhzin","advanced","","",""],["device","آلة / جهاز","jihaz","advanced","","",""],["machine","ماكينة / آلة","makina","advanced","","",""],["instrument","أداة / آلة","adat","advanced","","",""],["substance","مادة / مكون","madda","advanced","","",""],["ingredient","مكون / عنصر","mukawwin","advanced","","",""],["recipe","وصفة / ريسيت","wasfa","advanced","","",""],["portion","حصة / كمية","7issa","advanced","","",""],["serving","حصة / واحد طبسيل","7issa","advanced","","",""],["flavor","نكهة / طعم","ta3m","advanced","","",""],["texture","ملمس / تيكستير","talmas","advanced","","",""],["aroma","ريحة زوينة / عطر","ri7a","advanced","","",""],["scent","ريحة","ri7a","advanced","","",""],["smell","ريحة / شم","ri7a","advanced","","",""],["taste","طعم / دوق","ta3m","advanced","","",""],["touch","لمس / ملامسة","lams","advanced","","",""],["sense","حاسة / إحساس","7assa","advanced","","",""],["sensation","إحساس / حسّة","i7sas","advanced","","",""],["instinct","غريزة / حدس","gharisa","advanced","","",""],["intuition","حدس / فراسة","7ads","advanced","","",""],["logic","منطق / لوجيك","mantiq","advanced","","",""],["reasoning","تفكير / إستدلال","tafkir","advanced","","",""],["evidence","دليل / بريف","dalil","advanced","","",""],["proof","دليل / برهان","burhan","advanced","","",""],["theory","نظرية / تيوري","nadariya","advanced","","",""],["hypothesis","فرضية / هيپوطيز","fardiya","advanced","","",""],["experiment","تجربة / إكسپيريانس","tajriba","advanced","","",""],["research","بحث / ريشيرش","ba7th","advanced","","",""],["discovery","إكتشاف / ديكوفيرت","iktishaf","advanced","","",""],["invention","إختراع / إنفونسيو","ikhtira3","advanced","","",""],["innovation","إبتكار / إينوفاسيو","ibtikar","advanced","","",""],["technology","تكنولوجيا","teknolojya","advanced","","",""],["science","علم / ساينس","3ilm","advanced","","",""],["mathematics","رياضيات / ماط","riyadiyat","advanced","","",""],["physics","فيزيك","fizik","advanced","","",""],["chemistry","كيمياء / شيمي","kimiya","advanced","","",""],["biology","بيولوجيا","biyulujya","advanced","","",""],["geography","جيوگرافيا","jiyughrafiya","advanced","","",""],["philosophy","فلسفة","falsafa","advanced","","",""],["psychology","علم النفس / سيكولوجيا","3ilm nnafs","advanced","","",""],["economics","إقتصاد / إيكونومي","iqtisad","advanced","","",""],["politics","سياسة / پوليتيك","siyasa","advanced","","",""],["election","إنتخابات / إيليكسيو","intikhabat","advanced","","",""],["vote","تصويت / فوط","taswit","advanced","","",""],["citizen","مواطن / سيتوايا","muwatin","advanced","","",""],["nation","أمة / دولة","umma","advanced","","",""],["flag","راية / دروبو","raya","advanced","","",""],["army","جيش / أرمي","jaysh","advanced","","",""],["soldier","عسكري / جندي","3askari","advanced","","",""],["weapon","سلاح / آرم","sila7","advanced","","",""],["battle","معركة / باطاي","ma3raka","advanced","","",""],["victory","إنتصار / فيكتوار","intisar","advanced","","",""],["defeat","هزيمة / ديفيت","hazima","advanced","","",""],["treaty","معاهدة / تريتي","mu3ahada","advanced","","",""],["alliance","تحالف / أليانس","ta7aluf","advanced","","",""],["dog","كلب","kelb","everyday","","",""],["cat","قط / موش","qett","everyday","","",""],["bird","طير","tir","everyday","","",""],["horse","عود / حصان","3awd","everyday","","",""],["cow","بقرة","bagra","everyday","","",""],["sheep","حولي / خروف","7awli","everyday","","",""],["goat","معزة","m3za","everyday","","",""],["rabbit","قنية","qniya","everyday","","",""],["mouse","فار","far","everyday","","",""],["snake","حنش","7nash","everyday","","",""],["insect","حشرة","7ashra","everyday","","",""],["bee","نحلة","ne7la","everyday","","",""],["spider","رتيلة","rtila","everyday","","",""],["butterfly","فراشة","frasha","everyday","","",""],["lion","سبع","sb3","everyday","","",""],["monkey","قردة","qerda","everyday","","",""],["elephant","فيل","fil","everyday","","",""],["bear","دبة / دب","debb","everyday","","",""],["wolf","ديب","dib","everyday","","",""],["fox","تالب","taleb","everyday","","",""],["duck","بط","batt","everyday","","",""],["pig","حلوف","7allof","everyday","","",""],["frog","ضفدع / جعيدة","j3ida","everyday","","",""],["turtle","فقوع","fagu3","everyday","","",""],["camel","جمل / بعير","jmel","everyday","","",""],["donkey","حمار","7mar","everyday","","",""],["nail","مسمار","musmar","everyday","","",""],["hammer","مطرقة / شاكوش","shakush","everyday","","",""],["rope","حبل","7bel","everyday","","",""],["ladder","سلم","sellam","everyday","","",""],["bucket","سطل / كوبا","satl","everyday","","",""],["basket","قفة / سلة","qaffa","everyday","","",""],["blanket","غطا / كوبيرتير","ghta","everyday","","",""],["pillow","مخدة","mkhedda","everyday","","",""],["curtain","ستارة / ريدو","ridu","everyday","","",""],["carpet","زربية","zerbiya","everyday","","",""],["shelf","رف","raff","everyday","","",""],["drawer","دريوار / جارور","jaru","everyday","","",""],["candle","شمعة","sham3a","everyday","","",""],["match","كبريت","kabrit","everyday","","",""],["rubber","كاوتشو / مطاط","kawtshu","everyday","","",""],["plastic","بلاستيك","plastik","everyday","","",""],["brick","أجور / طوبة","ajur","everyday","","",""],["cement","سمنت","siman","everyday","","",""],["pipe","قنية / بيپ","qaniya","everyday","","",""],["wire","سلك / فيل","selk","everyday","","",""],["screw","بيز / لولب","biz","everyday","","",""],["zipper","سيرما / فرملوار","sirma","everyday","","",""],["needle","إبرة / مخيط","ibra","everyday","","",""],["thread","خيط","khit","everyday","","",""],["fabric","قماش / تيسو","qmash","everyday","","",""],["wool","صوف","suf","everyday","","",""],["cotton","قطن","qoton","everyday","","",""],["leather","جلد","jeld","everyday","","",""],["silk","حرير","7rir","everyday","","",""],["jewelry","حلي / دهب","7li","everyday","","",""],["ring","خاتم","khatem","everyday","","",""],["necklace","سلسلة / كولي","selsla","everyday","","",""],["bracelet","سوار / براصلي","sewar","everyday","","",""],["earring","حلقة / بوكلة","7elqa","everyday","","",""],["perfume","عطر","3atar","everyday","","",""],["makeup","ميكاپ / تجميل","tazwin","everyday","","",""],["comb","مشط","mshet","everyday","","",""],["razor","موس الحلاقة / راسوار","rasoir","everyday","","",""],["toothbrush","فرشاية السنان","frasha ddnan","everyday","","",""],["toothpaste","معجون السنان / دونتيفريس","dontifris","everyday","","",""],["shampoo","شامپو","shampu","everyday","","",""],["diaper","كوش","kosh","everyday","","",""],["stroller","پوسيت","pusset","everyday","","",""],["crib","سرير دراري","srir drari","everyday","","",""],["doll","بوبا / موميا","buba","everyday","","",""],["puzzle","بازل","puzzle","everyday","","",""],["balloon","بالون","balun","everyday","","",""],["kite","طيارة وراقة","tyara wraqa","everyday","","",""],["swing","بالانصوار / مرجيحة","balanswar","everyday","","",""],["slide","تزحلق / گليسير","tzehleq","everyday","","",""],["playground","ساحة اللعب","sa7at la3b","everyday","","",""],["zoo","حديقة الحيوانات / زو","zoo","everyday","","",""],["circus","سيرك","cirque","everyday","","",""],["magic","سحر / ماجي","se7r","everyday","","",""],["ghost","روح / عفريت","3afrit","everyday","","",""],["monster","وحش / مونستر","wa7sh","everyday","","",""],["angel","ملاك","malak","everyday","","",""],["devil","شيطان","shitan","everyday","","",""],["heaven","الجنة","jenna","everyday","","",""],["hell","النار / الجحيم","jahim","everyday","","",""],["soul","روح","ru7","everyday","","",""],["spirit","روح / شبح","ru7","everyday","","",""],["miracle","معجزة","mu3jiza","everyday","","",""],["blessing","بركة / نعمة","barka","everyday","","",""],["curse","لعنة","la3na","everyday","","",""],["luck","زهر / حظ","zher","everyday","","",""],["fate","قدر / مصير","qadar","everyday","","",""],["destiny","مصير","masir","everyday","","",""],["accident","حادثة / كسيدا","7adita","everyday","","",""],["emergency","حالة طارئة / أورجونس","7ala tari'a","everyday","","",""],["rescue","إنقاذ / سوفطاج","inqad","everyday","","",""],["disaster","كارثة / كاطاستروف","karita","everyday","","",""],["flood","فيضان / غرق","fayadan","everyday","","",""],["earthquake","زلزال","zilzal","everyday","","",""],["drought","جفاف","jafaf","everyday","","",""],["famine","مجاعة","maja3a","everyday","","",""],["epidemic","وباء / إيپيديمي","waba'","everyday","","",""],["vaccine","لقاح / فاكسان","vaksan","everyday","","",""],["injury","جرح / إصابة","jer7","everyday","","",""],["wound","جرح","jer7","everyday","","",""],["bruise","كدمة","kadma","everyday","","",""],["scar","ندبة / أثر الجرح","atar jer7","everyday","","",""],["disease","مرض / دا","marad","everyday","","",""],["infection","عدوى / إنفيكسيو","3adwa","everyday","","",""],["allergy","حساسية / أليرجي","7asasiya","everyday","","",""],["diabetes","السكري","sukri","everyday","","",""],["cancer","السرطان","saratan","everyday","","",""],["surgery","عملية جراحية / أوپيراسيو","3amaliya","everyday","","",""],["therapy","علاج / ترابي","3ilaj","everyday","","",""],["prescription","وصفة طبية / أوردونانس","ordonans","everyday","","",""],["pill","حبة / دوا","7abba","everyday","","",""],["injection","حقنة / پيكير","7oqna","everyday","","",""],["bandage","بانصمو / ضمادة","bansma","everyday","","",""],["library card","كارط المكتبة","kart lmaktaba","shopping","","",""],["umbrella","مطرية / شمسية","mtriya","shopping","","",""],["suitcase","فاليزة","valiza","shopping","","",""],["backpack","ساك دو دو / محفظة الظهر","sac a dos","shopping","","",""],["glasses","نظارة / لينيت","lunett","shopping","","",""],["scarf","إيشارب / شال","echarp","shopping","","",""],["glove","كاسطا / قفاز","gant","shopping","","",""],["sock","تقاشر","tqasher","shopping","","",""],["belt","حزام / سونتير","7zam","shopping","","",""],["jacket","كبوط / فيستة","kaboot","shopping","","",""],["sweater","تريكو / صويتر","tricot","shopping","","",""],["dress","كسوة / روبة","roba","shopping","","",""],["skirt","جوپ / تنورة","jup","shopping","","",""],["suit","كوستيم / بدلة","kostim","shopping","","",""],["tie","كرافاطة","karavat","shopping","","",""],["pocket","جيب / بوش","joyb","shopping","","",""],["zip","سيرما","sirma","shopping","","",""],["fit","ملايم / كيمشي عليه","kaymchi 3lih","shopping","","",""],["fashion","موضة / فاشيون","moda","shopping","","",""],["trend","تريند / موضة جديدة","trend","shopping","","",""],["size chart","جدول القياسات","jadwal lqyasat","shopping","","",""],["fitting room","كابين القياس / إيساياج","essayage","shopping","","",""],["cashier","كاسي / المحاسب","kasiye","shopping","","",""],["sale","تخفيض / سولد","solde","shopping","","",""],["coupon","كوبون","kupon","shopping","","",""],["voucher","بون / كوبون","bon","shopping","","",""],["delivery fee","تمن التوصيل / فري دو ليفريزو","tman ttawsil","shopping","","",""],["pickup","الجلب / ريترايت","jalb","shopping","","",""],["order","طلبية / كوموند","talabiya","shopping","","",""],["cart","العربية / كاري","3arbiya","shopping","","",""],["checkout","الخروج من السوق / كيساج","lkhruj","shopping","","",""],["puzzle piece","حتة دو پازل","7etta dyal puzzle","everyday","","",""],["thank you","شكرا","shukran","greetings","","",""],["please","عافاك / من فضلك","3afak","greetings","","",""],["sorry","سمحلي / معذرة","sme7li","greetings","","",""],["welcome","مرحبا / بلا جميل","merhba","greetings","","",""],["goodbye","بسلامة / تاتراو","bslama","greetings","","",""],["hello","سلام / أهلا","salam","greetings","","",""],["yes","واخا / إييه","wakha","greetings","","",""],["maybe","يمكن / واخا نشوف","yemken","greetings","","",""],["excuse me","سمح ليا","sme7liya","greetings","","",""],["congratulations","مبروك","mabruk","greetings","","",""],["cheers","بصحتك / صحة","bsa77tek","greetings","","",""],["good luck","نوفق / بالزهر","nwafaq","greetings","","",""],["take care","تهلا براسك","thella b rasek","greetings","","",""],["see you","نشوفك من بعد","nshufek men b3d","greetings","","",""],["happy birthday","عيد ميلاد سعيد","3id milad sa3id","greetings","","",""],["good morning","صباح الخير","sba7 lkhir","greetings","","",""],["good night","ليلة سعيدة / تصبح على خير","tsbe7 3la khir","greetings","","",""],["how are you","كيف داير / لاباس","labas","greetings","","",""],["nice to meet you","مسرور بمعرفتك / فرحان بيك","farhan bik","greetings","","",""],["drink","شرب","shreb","verbs","","",""],["behind","مورا","mura","core","","",""],["next to","حدا","7da","core","","",""],["May","ماي","mayu","time","","",""],["pretty","زوينة","zwina","descriptive","","",""],["bad","خايب","khayb","descriptive","","",""],["soft","رطب / ناعم","rteb","descriptive","","",""],["fresh","طري","tri","descriptive","","",""],["absent","غايب","ghayb","descriptive","","",""],["closed","مسدود","msdud","descriptive","","",""],["pepper","فلفلة","felfla","food","","",""],["cucumber","خيار","lkhyar","food","","",""],["carrot","خيزو","khizu","food","","",""],["mint","نعناع","n3na3","food","","",""],["parsley","معدنوس","m3dnus","food","","",""]];
+
+const CATEGORY_LABELS = {
+  core: 'Core 300', time: 'Time & dates', family: 'Family & people', body: 'Body & health',
+  food: 'Food & drink', home: 'House & objects', nature: 'Nature & weather', colors: 'Colors & description',
+  verbs: 'Common verbs', places: 'Places', school: 'School & work', transport: 'Transportation',
+  abstract: 'Abstract & ideas', tech: 'Technology', leisure: 'Leisure & sports', descriptive: 'Descriptive words',
+  misc: 'Miscellaneous', advanced: 'Advanced vocabulary', everyday: 'Everyday objects',
+  shopping: 'Shopping & clothing', greetings: 'Greetings & expressions'
+};
+
+function tierForIndex(i){
+  if(i < 300) return 1;
+  if(i < 600) return 2;
+  if(i < 1299) return 3;
+  return 4;
+}
+
+const WORDS = WORDS_RAW.map((w, i) => ({
+  id: i, en: w[0], ar: w[1], lat: w[2], cat: w[3],
+  sentAr: w[4] || '', sentLat: w[5] || '', sentEn: w[6] || '',
+  tier: tierForIndex(i)
+}));
+
+const STORAGE_KEY = 'darija-srs-progress-v1';
+const SETTINGS_KEY = 'darija-srs-settings-v1';
+
+let progress = {};
+let settings = { dailyGoal: 20 };
+let storageReady = false;
+
+function todayStr(){
+  return new Date().toISOString().slice(0,10);
+}
+
+
+async function loadState(){
+  try{
+    const p = localStorage.getItem(STORAGE_KEY);
+    if(p) progress = JSON.parse(p);
+  }catch(e){ progress = {}; }
+  try{
+    const s = localStorage.getItem(SETTINGS_KEY);
+    if(s) settings = JSON.parse(s);
+  }catch(e){ /* keep defaults */ }
+  storageReady = true;
+}
+
+async function saveProgress(){
+  try{
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(progress));
+  }catch(e){ console.error('save failed', e); }
+}
+
+async function saveSettings(){
+  try{
+    localStorage.setItem(SETTINGS_KEY, JSON.stringify(settings));
+  }catch(e){ console.error('save failed', e); }
+}
+
+function getCardState(wordId, direction){
+  const key = wordId + ':' + direction;
+  if(!progress[key]){
+    progress[key] = { ef: 2.5, interval: 0, reps: 0, due: todayStr(), lastGrade: null };
+  }
+  return progress[key];
+}
+
+function isDue(wordId, direction){
+  const key = wordId + ':' + direction;
+  const st = progress[key];
+  if(!st) return true;
+  return st.due <= todayStr();
+}
+
+function gradeCard(wordId, direction, grade){
+  const key = wordId + ':' + direction;
+  const st = getCardState(wordId, direction);
+  let { ef, interval, reps } = st;
+
+  if(grade === 0){
+    reps = 0;
+    interval = 0;
+    ef = Math.max(1.3, ef - 0.2);
+  } else {
+    const q = grade;
+    ef = Math.max(1.3, ef + (0.1 - (3-q)*(0.08+(3-q)*0.02)));
+    reps += 1;
+    if(reps === 1){
+      interval = grade === 1 ? 1 : (grade === 2 ? 2 : 3);
+    } else if(reps === 2){
+      interval = grade === 1 ? 3 : (grade === 2 ? 5 : 7);
+    } else {
+      interval = Math.round(interval * ef);
+    }
+  }
+
+  const due = new Date();
+  due.setDate(due.getDate() + Math.max(1, interval));
+  st.ef = ef;
+  st.interval = interval;
+  st.reps = reps;
+  st.due = grade === 0 ? todayStr() : due.toISOString().slice(0,10);
+  st.lastGrade = grade;
+  progress[key] = st;
+  saveProgress();
+}
+
+function previewInterval(wordId, direction, grade){
+  const st = getCardState(wordId, direction);
+  let { ef, interval, reps } = { ...st };
+  if(grade === 0) return 'again today';
+  let newInterval;
+  if(reps === 0) newInterval = grade === 1 ? 1 : (grade === 2 ? 2 : 3);
+  else if(reps === 1) newInterval = grade === 1 ? 3 : (grade === 2 ? 5 : 7);
+  else newInterval = Math.round(interval * ef);
+  newInterval = Math.max(1, newInterval);
+  return newInterval === 1 ? '1 day' : newInterval + ' days';
+}
+
+function computeStats(){
+  let dueCount = 0, learned = 0, total = 0;
+  for(const w of WORDS){
+    if(activeCategory !== 'all' && w.cat !== activeCategory) continue;
+    for(const dir of ['e2d','d2e']){
+      total++;
+      const key = w.id + ':' + dir;
+      const st = progress[key];
+      if(st && st.reps > 0) learned++;
+      if(isDue(w.id, dir)) dueCount++;
+    }
+  }
+  return { dueCount, learned, total };
+}
+
+function computeStreak(){
+  const log = progress.__log || {};
+  let streak = 0;
+  let d = new Date();
+  while(true){
+    const key = d.toISOString().slice(0,10);
+    if(log[key]) { streak++; d.setDate(d.getDate()-1); }
+    else break;
+  }
+  return streak;
+}
+
+function logToday(){
+  if(!progress.__log) progress.__log = {};
+  progress.__log[todayStr()] = true;
+}
+
+// ---------------- App state ----------------
+let mode = 'flash';
+let direction = 'mixed';
+let activeCategory = 'all';
+let activeTier = 'all';
+let typedAnswer = '';
+let typedChecked = false;
+let typedCorrect = false;
+let session = [];
+let sessionIdx = 0;
+let cardFlipped = false;
+let quizAnswered = false;
+let sessionActive = false;
+let settingsOpen = false;
+let categoryPickerOpen = false;
+let translateQuery = '';
+let sentenceQuery = '';
+let secretOpen = false;
+
+function buildMissedSession(){
+  const missed = [];
+  for(const w of WORDS){
+    for(const dir of ['e2d','d2e']){
+      const key = w.id + ':' + dir;
+      const st = progress[key];
+      if(st && (st.lastGrade === 0 || st.lastGrade === 1)){
+        missed.push({ word: w, dir });
+      }
+    }
+  }
+  const shuffled = shuffleArray(missed);
+  return shuffled.slice(0, settings.dailyGoal);
+}
+
+function startMissedSession(){
+  session = buildMissedSession();
+  sessionIdx = 0;
+  cardFlipped = false;
+  quizAnswered = false;
+  typedAnswer = '';
+  typedChecked = false;
+  typedCorrect = false;
+  sessionActive = true;
+  logToday();
+  render();
+}
+
+function countMissed(){
+  let count = 0;
+  for(const w of WORDS){
+    for(const dir of ['e2d','d2e']){
+      const key = w.id + ':' + dir;
+      const st = progress[key];
+      if(st && (st.lastGrade === 0 || st.lastGrade === 1)) count++;
+    }
+  }
+  return count;
+}
+
+function buildSession(){
+  const dueWords = [];
+  for(const w of WORDS){
+    if(activeCategory !== 'all' && w.cat !== activeCategory) continue;
+    if(activeTier !== 'all' && w.tier > activeTier) continue;
+    const dirs = direction === 'mixed' ? ['e2d','d2e'] : [direction];
+    for(const dir of dirs){
+      if(isDue(w.id, dir)) dueWords.push({ word: w, dir });
+    }
+  }
+  const shuffled = shuffleArray(dueWords);
+  return shuffled.slice(0, settings.dailyGoal);
+}
+
+function startSession(){
+  session = buildSession();
+  sessionIdx = 0;
+  cardFlipped = false;
+  quizAnswered = false;
+  typedAnswer = '';
+  typedChecked = false;
+  typedCorrect = false;
+  sessionActive = true;
+  logToday();
+  render();
+}
+
+function endSession(){
+  sessionActive = false;
+  render();
+}
+
+function nextCard(){
+  sessionIdx++;
+  cardFlipped = false;
+  quizAnswered = false;
+  typedAnswer = '';
+  typedChecked = false;
+  typedCorrect = false;
+  if(sessionIdx >= session.length){
+    sessionActive = false;
+  }
+  render();
+}
+
+function flipCard(){
+  cardFlipped = true;
+  render();
+}
+
+function grade(g){
+  const cur = session[sessionIdx];
+  gradeCard(cur.word.id, cur.dir, g);
+  nextCard();
+}
+
+function buildQuizOptions(current){
+  const isE2D = current.dir === 'e2d';
+  const correctAnswer = isE2D ? current.word.ar : current.word.en;
+  const pool = WORDS.filter(w => w.id !== current.word.id);
+  const distractors = sampleSize(pool, 3).map(w => isE2D ? w.ar : w.en);
+  return shuffleArray([correctAnswer, ...distractors]);
+}
+
+let currentQuizOptions = null;
+let currentQuizCorrect = null;
+
+function answerQuiz(selected, correct){
+  if(quizAnswered) return;
+  quizAnswered = true;
+  const cur = session[sessionIdx];
+  const g = selected === correct ? 3 : 0;
+  gradeCard(cur.word.id, cur.dir, g);
+  render();
+  setTimeout(() => { nextCard(); }, 900);
+}
+
+// ---------------- Rendering ----------------
+function el(tag, attrs, children){
+  attrs = attrs || {};
+  const e = document.createElement(tag);
+  for(const k in attrs){
+    const v = attrs[k];
+    if(v === null || v === undefined) continue;
+    if(k === 'class') e.className = v;
+    else if(k === 'html') e.innerHTML = v;
+    else if(k.startsWith('on')) e.addEventListener(k.slice(2), v);
+    else e.setAttribute(k, v);
+  }
+  (children||[]).forEach(c => { if(c) e.appendChild(c); });
+  return e;
+}
+function txt(s){ return document.createTextNode(s); }
+
+function renderStats(container){
+  const stats = computeStats();
+  const streak = computeStreak();
+  const row = el('div',{class:'stats'});
+  row.appendChild(el('div',{class:'stat due'},[
+    el('div',{class:'stat-num'},[txt(stats.dueCount)]),
+    el('div',{class:'stat-label'},[txt('Due now')])
+  ]));
+  row.appendChild(el('div',{class:'stat learned'},[
+    el('div',{class:'stat-num'},[txt(stats.learned)]),
+    el('div',{class:'stat-label'},[txt('Learned')])
+  ]));
+  row.appendChild(el('div',{class:'stat streak'},[
+    el('div',{class:'stat-num'},[txt(streak)]),
+    el('div',{class:'stat-label'},[txt(streak===1 ? 'Day streak' : 'Day streak')])
+  ]));
+  row.appendChild(el('div',{class:'stat'},[
+    el('div',{class:'stat-num'},[txt(stats.total)]),
+    el('div',{class:'stat-label'},[txt('Total cards')])
+  ]));
+  container.appendChild(row);
+}
+
+function renderModeRow(container){
+  const row = el('div',{class:'mode-row'});
+  const modes = [
+    {k:'flash', label:'Flashcards'},
+    {k:'type', label:'Type it'},
+    {k:'quiz', label:'Quiz'},
+    {k:'sentences', label:'Sentences'},
+    {k:'translate', label:'Translate'}
+  ];
+  modes.forEach(m => {
+    const btn = el('button',{
+      class:'mode-btn' + (mode===m.k ? ' active':''),
+      onclick: () => { if(!sessionActive){ mode = m.k; render(); } }
+    },[txt(m.label)]);
+    row.appendChild(btn);
+  });
+  container.appendChild(row);
+
+  if(mode === 'translate' || mode === 'sentences') return;
+
+  const dirRow = el('div',{class:'mode-row'});
+  const dirs = [
+    {k:'mixed', label:'Mixed'},
+    {k:'e2d', label:'English → Darija'},
+    {k:'d2e', label:'Darija → English'}
+  ];
+  dirs.forEach(d => {
+    const btn = el('button',{
+      class:'mode-btn' + (direction===d.k ? ' active':''),
+      onclick: () => { if(!sessionActive){ direction = d.k; render(); } }
+    },[txt(d.label)]);
+    dirRow.appendChild(btn);
+  });
+  container.appendChild(dirRow);
+
+  const tierRow = el('div',{class:'mode-row'});
+  const tiers = [
+    {k:'all', label:'All tiers'},
+    {k:1, label:'Tier 1 (top 300)'},
+    {k:2, label:'Tier 1+2 (top 600)'}
+  ];
+  tiers.forEach(t => {
+    const btn = el('button',{
+      class:'mode-btn' + (activeTier===t.k ? ' active':''),
+      onclick: () => { if(!sessionActive){ activeTier = t.k; render(); } }
+    },[txt(t.label)]);
+    tierRow.appendChild(btn);
+  });
+  container.appendChild(tierRow);
+
+  const catRow = el('div',{class:'cat-row'});
+  const catLabel = activeCategory === 'all' ? 'All categories' : CATEGORY_LABELS[activeCategory];
+  const catBtn = el('button',{
+    class:'cat-select-btn',
+    onclick: () => { if(!sessionActive){ categoryPickerOpen = !categoryPickerOpen; render(); } }
+  },[
+    el('span',{},[txt(catLabel)]),
+    el('span',{class:'cat-chevron'},[txt(categoryPickerOpen ? '▴' : '▾')])
+  ]);
+  catRow.appendChild(catBtn);
+  container.appendChild(catRow);
+
+  if(categoryPickerOpen && !sessionActive){
+    const grid = el('div',{class:'cat-grid'});
+    const allBtn = el('button',{
+      class:'cat-pill' + (activeCategory==='all' ? ' active':''),
+      onclick: () => { activeCategory = 'all'; categoryPickerOpen = false; render(); }
+    },[txt('All categories')]);
+    grid.appendChild(allBtn);
+    Object.keys(CATEGORY_LABELS).forEach(k => {
+      const count = WORDS.filter(w => w.cat === k).length;
+      const btn = el('button',{
+        class:'cat-pill' + (activeCategory===k ? ' active':''),
+        onclick: () => { activeCategory = k; categoryPickerOpen = false; render(); }
+      },[txt(CATEGORY_LABELS[k] + ' (' + count + ')')]);
+      grid.appendChild(btn);
+    });
+    container.appendChild(grid);
+  }
+}
+
+function renderIntroPanel(container){
+  const stats = computeStats();
+  const panel = el('div',{class:'panel'});
+  panel.appendChild(el('h2',{},[txt(stats.dueCount > 0 ? 'Ready to review' : "You're all caught up")]));
+  const catNote = activeCategory === 'all' ? '' : ` in ${CATEGORY_LABELS[activeCategory]}`;
+  panel.appendChild(el('p',{},[txt(
+    stats.dueCount > 0
+      ? `${stats.dueCount} cards are due${catNote}. A session covers up to ${settings.dailyGoal} cards.`
+      : `No cards are due${catNote} right now. Come back later, or lower the daily goal in settings to study ahead.`
+  )]));
+  const startBtn = el('button',{
+    class:'big-btn',
+    onclick: startSession
+  },[txt('Start session')]);
+  startBtn.disabled = stats.dueCount === 0;
+  panel.appendChild(startBtn);
+  container.appendChild(panel);
+
+  const missedCount = countMissed();
+  if(missedCount > 0){
+    const missedPanel = el('div',{class:'missed-panel'});
+    missedPanel.appendChild(el('div',{class:'missed-text'},[
+      txt(`${missedCount} word${missedCount === 1 ? '' : 's'} you recently struggled with`)
+    ]));
+    missedPanel.appendChild(el('button',{
+      class:'missed-btn',
+      onclick: startMissedSession
+    },[txt('Drill weak spots')]));
+    container.appendChild(missedPanel);
+  }
+
+  const secretRow = el('div',{class:'secret-btn-row'});
+  secretRow.appendChild(el('button',{
+    class:'secret-btn',
+    onclick: () => { secretOpen = true; render(); }
+  },[txt('Kaoutar Do Not Open')]));
+  container.appendChild(secretRow);
+}
+
+function renderFlashcard(container){
+  const cur = session[sessionIdx];
+  const { word, dir } = cur;
+  const isE2D = dir === 'e2d';
+
+  const zone = el('div',{class:'card-zone'});
+
+  const prow = el('div',{class:'progress-row'});
+  prow.appendChild(el('span',{class:'dir-tag' + (isE2D?'':' rev')},[txt(isE2D ? 'EN → Darija' : 'Darija → EN')]));
+  const track = el('div',{class:'progress-track'});
+  track.appendChild(el('div',{class:'progress-fill', style:`width:${(sessionIdx/session.length)*100}%`}));
+  prow.appendChild(track);
+  prow.appendChild(el('span',{},[txt(`${sessionIdx+1} / ${session.length}`)]));
+  zone.appendChild(prow);
+
+  const card = el('div',{
+    class:'flashcard',
+    onclick: () => { if(!cardFlipped) flipCard(); }
+  });
+
+  card.appendChild(el('div',{class:'card-eyebrow'},[txt(isE2D ? 'English' : 'Darija')]));
+
+  if(isE2D){
+    card.appendChild(el('div',{class:'card-prompt'},[txt(word.en)]));
+  } else {
+    card.appendChild(el('div',{class:'card-prompt arabic'},[txt(word.ar)]));
+    card.appendChild(el('div',{class:'answer-sub', style:'margin-top:8px;'},[txt(word.lat)]));
+  }
+
+  if(!cardFlipped){
+    card.appendChild(el('div',{class:'tap-hint'},[txt('Tap to reveal')]));
+  } else {
+    const ablock = el('div',{class:'answer-block'});
+    if(isE2D){
+      ablock.appendChild(el('div',{class:'answer-main arabic'},[txt(word.ar)]));
+      ablock.appendChild(el('div',{class:'answer-sub'},[txt(word.lat)]));
+    } else {
+      ablock.appendChild(el('div',{class:'answer-main'},[txt(word.en)]));
+    }
+    card.appendChild(ablock);
+
+    if(word.sentAr){
+      const sblock = el('div',{class:'sentence-block'});
+      sblock.appendChild(el('div',{class:'sentence-eyebrow'},[txt('Example')]));
+      sblock.appendChild(el('div',{class:'sentence-ar'},[txt(word.sentAr)]));
+      sblock.appendChild(el('div',{class:'sentence-lat'},[txt(word.sentLat)]));
+      sblock.appendChild(el('div',{class:'sentence-en'},[txt(word.sentEn)]));
+      card.appendChild(sblock);
+    }
+  }
+
+  zone.appendChild(card);
+
+  if(cardFlipped){
+    const grow = el('div',{class:'grade-row'});
+    const grades = [
+      {g:0, cls:'grade-again', label:'Again'},
+      {g:1, cls:'grade-hard', label:'Hard'},
+      {g:2, cls:'grade-good', label:'Good'},
+      {g:3, cls:'grade-easy', label:'Easy'}
+    ];
+    grades.forEach(gr => {
+      const interval = previewInterval(word.id, dir, gr.g);
+      grow.appendChild(el('button',{
+        class:'grade-btn ' + gr.cls,
+        onclick: () => grade(gr.g)
+      },[
+        txt(gr.label),
+        el('span',{class:'interval'},[txt(interval)])
+      ]));
+    });
+    zone.appendChild(grow);
+  }
+
+  const frow = el('div',{class:'footer-row'});
+  frow.appendChild(el('button',{class:'link-btn', onclick: endSession},[txt('End session')]));
+  container.appendChild(zone);
+  container.appendChild(frow);
+}
+
+function renderTypingMode(container){
+  const cur = session[sessionIdx];
+  const { word, dir } = cur;
+  const isE2D = dir === 'e2d';
+
+  const zone = el('div',{class:'card-zone'});
+
+  const prow = el('div',{class:'progress-row'});
+  prow.appendChild(el('span',{class:'dir-tag' + (isE2D?'':' rev')},[txt(isE2D ? 'EN → Darija' : 'Darija → EN')]));
+  const track = el('div',{class:'progress-track'});
+  track.appendChild(el('div',{class:'progress-fill', style:`width:${(sessionIdx/session.length)*100}%`}));
+  prow.appendChild(track);
+  prow.appendChild(el('span',{},[txt(`${sessionIdx+1} / ${session.length}`)]));
+  zone.appendChild(prow);
+
+  const card = el('div',{class:'flashcard', style:'cursor:default;'});
+  card.appendChild(el('div',{class:'card-eyebrow'},[txt(isE2D ? 'Type it in Darija (Latin letters)' : 'Type it in English')]));
+
+  if(isE2D){
+    card.appendChild(el('div',{class:'card-prompt'},[txt(word.en)]));
+  } else {
+    card.appendChild(el('div',{class:'card-prompt arabic'},[txt(word.ar)]));
+    card.appendChild(el('div',{class:'answer-sub', style:'margin-top:8px;'},[txt(word.lat)]));
+  }
+  zone.appendChild(card);
+
+  const inputRow = el('div',{class:'type-input-row'});
+  const input = el('input',{
+    type:'text',
+    class:'type-input' + (typedChecked ? (typedCorrect ? ' correct' : ' wrong') : ''),
+    placeholder: isE2D ? 'Type the Darija word…' : 'Type the English word…',
+    value: typedAnswer,
+    autocomplete:'off',
+    autocapitalize:'off',
+    spellcheck:'false'
+  });
+  if(!typedChecked){
+    input.addEventListener('input', (e) => { typedAnswer = e.target.value; });
+    input.addEventListener('keydown', (e) => { if(e.key === 'Enter') checkTypedAnswer(); });
+  } else {
+    input.disabled = true;
+  }
+  inputRow.appendChild(input);
+
+  if(!typedChecked){
+    inputRow.appendChild(el('button',{
+      class:'big-btn',
+      onclick: checkTypedAnswer
+    },[txt('Check')]));
+  }
+  zone.appendChild(inputRow);
+
+  if(typedChecked){
+    const fblock = el('div',{class:'type-feedback'});
+    fblock.appendChild(el('div',{class:'type-feedback-label'},[
+      txt(typedCorrect ? 'Correct!' : 'Not quite')
+    ]));
+    if(isE2D){
+      fblock.appendChild(el('div',{class:'answer-main arabic'},[txt(word.ar)]));
+      fblock.appendChild(el('div',{class:'answer-sub'},[txt(word.lat)]));
+    } else {
+      fblock.appendChild(el('div',{class:'answer-main'},[txt(word.en)]));
+    }
+    zone.appendChild(fblock);
+
+    if(word.sentAr){
+      const sblock = el('div',{class:'sentence-block'});
+      sblock.appendChild(el('div',{class:'sentence-eyebrow'},[txt('Example')]));
+      sblock.appendChild(el('div',{class:'sentence-ar'},[txt(word.sentAr)]));
+      sblock.appendChild(el('div',{class:'sentence-lat'},[txt(word.sentLat)]));
+      sblock.appendChild(el('div',{class:'sentence-en'},[txt(word.sentEn)]));
+      zone.appendChild(sblock);
+    }
+
+    const grow = el('div',{class:'grade-row'});
+    const grades = [
+      {g:0, cls:'grade-again', label:'Again'},
+      {g:1, cls:'grade-hard', label:'Hard'},
+      {g:2, cls:'grade-good', label:'Good'},
+      {g:3, cls:'grade-easy', label:'Easy'}
+    ];
+    grades.forEach(gr => {
+      const interval = previewInterval(word.id, dir, gr.g);
+      grow.appendChild(el('button',{
+        class:'grade-btn ' + gr.cls,
+        onclick: () => gradeTyped(gr.g)
+      },[
+        txt(gr.label),
+        el('span',{class:'interval'},[txt(interval)])
+      ]));
+    });
+    zone.appendChild(grow);
+  }
+
+  const frow = el('div',{class:'footer-row'});
+  frow.appendChild(el('button',{class:'link-btn', onclick: endSession},[txt('End session')]));
+  container.appendChild(zone);
+  container.appendChild(frow);
+
+  if(!typedChecked){
+    setTimeout(() => { input.focus({preventScroll:true}); }, 0);
+  }
+}
+
+function checkTypedAnswer(){
+  const cur = session[sessionIdx];
+  const { word, dir } = cur;
+  const isE2D = dir === 'e2d';
+  const correctOptions = isE2D ? [word.lat, ...word.lat.split('/').map(s=>s.trim())] : [word.en];
+  typedCorrect = answersMatch(typedAnswer, correctOptions);
+  typedChecked = true;
+  render();
+}
+
+function gradeTyped(g){
+  const cur = session[sessionIdx];
+  gradeCard(cur.word.id, cur.dir, g);
+  typedAnswer = '';
+  typedChecked = false;
+  typedCorrect = false;
+  nextCard();
+}
+
+function renderQuiz(container){
+  const cur = session[sessionIdx];
+  const { word, dir } = cur;
+  const isE2D = dir === 'e2d';
+
+  const cacheKey = word.id + ':' + dir + ':' + sessionIdx;
+  if(window.__quizCacheKey !== cacheKey){
+    window.__quizCacheKey = cacheKey;
+    currentQuizOptions = buildQuizOptions(cur);
+    currentQuizCorrect = isE2D ? word.ar : word.en;
+  }
+
+  const zone = el('div',{class:'card-zone'});
+
+  const prow = el('div',{class:'progress-row'});
+  prow.appendChild(el('span',{class:'dir-tag' + (isE2D?'':' rev')},[txt(isE2D ? 'EN → Darija' : 'Darija → EN')]));
+  const track = el('div',{class:'progress-track'});
+  track.appendChild(el('div',{class:'progress-fill', style:`width:${(sessionIdx/session.length)*100}%`}));
+  prow.appendChild(track);
+  prow.appendChild(el('span',{},[txt(`${sessionIdx+1} / ${session.length}`)]));
+  zone.appendChild(prow);
+
+  const card = el('div',{class:'flashcard', style:'cursor:default;'});
+  card.appendChild(el('div',{class:'card-eyebrow'},[txt(isE2D ? 'Translate to Darija' : 'Translate to English')]));
+  if(isE2D){
+    card.appendChild(el('div',{class:'card-prompt'},[txt(word.en)]));
+  } else {
+    card.appendChild(el('div',{class:'card-prompt arabic'},[txt(word.ar)]));
+    card.appendChild(el('div',{class:'answer-sub', style:'margin-top:8px;'},[txt(word.lat)]));
+  }
+  zone.appendChild(card);
+
+  const opts = el('div',{class:'quiz-options'});
+  currentQuizOptions.forEach(opt => {
+    const isCorrect = opt === currentQuizCorrect;
+    let cls = 'quiz-opt' + (isE2D ? ' arabic' : '');
+    if(quizAnswered){
+      cls += isCorrect ? ' correct' : '';
+      cls += ' disabled';
+    }
+    opts.appendChild(el('div',{
+      class:cls,
+      onclick: () => answerQuiz(opt, currentQuizCorrect)
+    },[txt(opt)]));
+  });
+  zone.appendChild(opts);
+
+  const frow = el('div',{class:'footer-row'});
+  frow.appendChild(el('button',{class:'link-btn', onclick: endSession},[txt('End session')]));
+  container.appendChild(zone);
+  container.appendChild(frow);
+}
+
+function renderSentencesSection(container){
+  const allSentences = WORDS.filter(w => w.sentEn);
+
+  const panel = el('div',{class:'translate-panel'});
+
+  const inputRow = el('div',{class:'translate-input-row'});
+  const input = el('input',{
+    type:'text',
+    class:'translate-input',
+    placeholder:'Search sentences by English, Darija, or Arabic…',
+    value: sentenceQuery
+  });
+  input.addEventListener('input', (e) => {
+    sentenceQuery = e.target.value;
+    renderSentenceResults(resultsBox, allSentences);
+  });
+  inputRow.appendChild(input);
+  panel.appendChild(inputRow);
+
+  panel.appendChild(el('div',{class:'sentences-count'},[
+    txt(`${allSentences.length} example sentences`)
+  ]));
+
+  const resultsBox = el('div',{class:'translate-results'});
+  panel.appendChild(resultsBox);
+  container.appendChild(panel);
+
+  renderSentenceResults(resultsBox, allSentences);
+}
+
+function renderSentenceResults(resultsBox, allSentences){
+  resultsBox.innerHTML = '';
+  const q = sentenceQuery.trim().toLowerCase();
+
+  const list = q
+    ? allSentences.filter(w => {
+        return w.en.toLowerCase().includes(q) ||
+               w.sentEn.toLowerCase().includes(q) ||
+               w.sentLat.toLowerCase().includes(q) ||
+               w.sentAr.includes(sentenceQuery.trim());
+      })
+    : allSentences;
+
+  if(list.length === 0){
+    resultsBox.appendChild(el('div',{class:'translate-hint'},[
+      txt('No sentences match that search.')
+    ]));
+    return;
+  }
+
+  const shown = list.slice(0, 50);
+  shown.forEach(w => {
+    const card = el('div',{class:'sentence-search-card'});
+    card.appendChild(el('div',{class:'sentence-search-word'},[txt(w.en)]));
+    card.appendChild(el('div',{class:'sentence-search-ar'},[txt(w.sentAr)]));
+    card.appendChild(el('div',{class:'sentence-search-lat'},[txt(w.sentLat)]));
+    card.appendChild(el('div',{class:'sentence-search-en'},[txt(w.sentEn)]));
+    resultsBox.appendChild(card);
+  });
+
+  if(list.length > 50){
+    resultsBox.appendChild(el('div',{class:'translate-hint'},[
+      txt(`Showing 50 of ${list.length} matches — keep typing to narrow it down.`)
+    ]));
+  }
+}
+
+const CAT_SVG = `<svg width="90" height="60" viewBox="0 0 90 60" xmlns="http://www.w3.org/2000/svg">
+<g id="cat-walker">
+  <ellipse cx="40" cy="24" rx="9" ry="5" fill="#3F4A52" transform="rotate(-15 40 24)"/>
+  <ellipse cx="48" cy="38" rx="24" ry="14" fill="#4B5860"/>
+  <ellipse cx="48" cy="38" rx="24" ry="14" fill="none" stroke="#3A444B" stroke-width="0.5" opacity="0.4"/>
+  <g class="cat-leg cat-leg-back-left" style="transform-origin:31px 44px;">
+    <rect x="28" y="44" width="6" height="13" rx="3" fill="#3F4A52"/>
+  </g>
+  <g class="cat-leg cat-leg-back-right" style="transform-origin:43px 44px;">
+    <rect x="40" y="44" width="6" height="13" rx="3" fill="#4B5860"/>
+  </g>
+  <circle cx="74" cy="26" r="13" fill="#4B5860"/>
+  <polygon points="65,16 68,6 71,17" fill="#4B5860"/>
+  <polygon points="80,16 83,6 85,18" fill="#4B5860"/>
+  <polygon points="66,15 68,9 70,16" fill="#9AAAB0"/>
+  <polygon points="80,15 82,9 84,16" fill="#9AAAB0"/>
+  <circle cx="69" cy="25" r="2.3" fill="#C9E4D8"/>
+  <circle cx="79" cy="25" r="2.3" fill="#C9E4D8"/>
+  <circle cx="69" cy="25" r="1" fill="#1A1F22"/>
+  <circle cx="79" cy="25" r="1" fill="#1A1F22"/>
+  <polygon points="73,30 76,30 74.5,32.5" fill="#D98FA3"/>
+  <line x1="61" y1="29" x2="50" y2="27" stroke="#D9DEE1" stroke-width="0.6"/>
+  <line x1="61" y1="31" x2="50" y2="31" stroke="#D9DEE1" stroke-width="0.6"/>
+  <line x1="86" y1="29" x2="97" y2="27" stroke="#D9DEE1" stroke-width="0.6"/>
+  <line x1="86" y1="31" x2="97" y2="31" stroke="#D9DEE1" stroke-width="0.6"/>
+  <g class="cat-leg cat-leg-front-left" style="transform-origin:59px 44px;">
+    <rect x="56" y="44" width="6" height="13" rx="3" fill="#4B5860"/>
+  </g>
+  <g class="cat-leg cat-leg-front-right" style="transform-origin:69px 44px;">
+    <rect x="66" y="44" width="6" height="13" rx="3" fill="#3F4A52"/>
+  </g>
+  <path class="cat-tail" d="M24,38 Q8,30 14,18" stroke="#3F4A52" stroke-width="6" stroke-linecap="round" fill="none" style="transform-origin:24px 38px;"/>
+</g>
+</svg>`;
+
+let catWalking = false;
+
+function triggerCatWalk(){
+  if(catWalking) return;
+  catWalking = true;
+
+  const stage = document.createElement('div');
+  stage.className = 'cat-walk-stage';
+  stage.innerHTML = CAT_SVG;
+
+  const bubble = document.createElement('div');
+  bubble.className = 'cat-speech-bubble';
+  bubble.textContent = 'سلام!';
+  stage.appendChild(bubble);
+
+  document.body.appendChild(stage);
+
+  requestAnimationFrame(() => {
+    stage.classList.add('cat-walk-active');
+  });
+
+  setTimeout(() => {
+    stage.remove();
+    catWalking = false;
+  }, 7800);
+}
+
+function renderSecretScreen(){
+  const overlay = el('div',{class:'secret-overlay'});
+  const flowersDiv = el('div',{class:'secret-flowers', id:'secret-flowers'});
+  overlay.appendChild(flowersDiv);
+
+  const content = el('div',{class:'secret-content'});
+  content.appendChild(el('div',{class:'secret-message'},[txt('زوين، كنتمنى النهار لي نقدرو نهضرو فيه مزيان.')]));
+  content.appendChild(el('button',{
+    class:'secret-close',
+    onclick: () => { secretOpen = false; render(); }
+  },[txt('Close')]));
+  overlay.appendChild(content);
+
+  document.body.appendChild(overlay);
+  renderSecretFlowers(flowersDiv);
+}
+
+function renderSettingsOverlay(container){
+  const overlay = el('div',{class:'settings-overlay' + (settingsOpen?' open':'')});
+  const box = el('div',{class:'settings-box'});
+  box.appendChild(el('h3',{},[txt('Settings')]));
+
+  const goalRow = el('div',{class:'settings-row'});
+  goalRow.appendChild(el('span',{},[txt('Cards per session')]));
+  const goalSelect = el('select',{style:'font-size:14px; padding:4px 8px; border-radius:8px; border:0.5px solid var(--line);'});
+  [10,20,30,50].forEach(n => {
+    const opt = el('option',{value:n},[txt(n)]);
+    if(settings.dailyGoal === n) opt.setAttribute('selected','true');
+    goalSelect.appendChild(opt);
+  });
+  goalSelect.addEventListener('change', (e) => {
+    settings.dailyGoal = parseInt(e.target.value);
+    saveSettings();
+  });
+  goalRow.appendChild(goalSelect);
+  box.appendChild(goalRow);
+
+  box.appendChild(el('div',{class:'numerals-legend-title'},[txt('Numbers in pronunciation')]));
+  const legendItems = [
+    {num:'3', desc:'a throat sound with no English equivalent (Arabic ع)', example:"3andi = \"I have\""},
+    {num:'7', desc:'a breathy “h” from the throat (Arabic ح)', example:"7etta = \"until\""},
+    {num:'9', desc:'a deep, back-of-throat “k” (Arabic ق)', example:"9achra = \"ten\""},
+    {num:'5 / kh', desc:'like the “ch” in loch (Arabic خ)', example:"khassek = \"you need\""},
+  ];
+  const legendBox = el('div',{class:'numerals-legend'});
+  legendItems.forEach(item => {
+    const row = el('div',{class:'numeral-row'});
+    row.appendChild(el('div',{class:'numeral-badge'},[txt(item.num)]));
+    const textCol = el('div',{class:'numeral-text'});
+    textCol.appendChild(el('div',{class:'numeral-desc'},[txt(item.desc)]));
+    textCol.appendChild(el('div',{class:'numeral-example'},[txt(item.example)]));
+    row.appendChild(textCol);
+    legendBox.appendChild(row);
+  });
+  box.appendChild(legendBox);
+
+  const exportRow = el('div',{class:'export-row'});
+  const exportBtn = el('button',{
+    class:'export-btn',
+    onclick: exportDatasetToPDF
+  },[txt(
+    pdfExportStatus === 'loading' ? 'Opening…' : 'Export dataset as PDF'
+  )]);
+  if(pdfExportStatus === 'loading') exportBtn.disabled = true;
+  exportRow.appendChild(exportBtn);
+  exportRow.appendChild(el('div',{class:'export-hint'},[
+    txt('Opens a printable page in a new tab — choose "Save as PDF" in the print dialog.')
+  ]));
+  if(pdfExportStatus === 'error'){
+    exportRow.appendChild(el('div',{class:'export-error'},[
+      txt('Could not open the print window. Your browser may have blocked the pop-up — allow pop-ups for this site and try again.')
+    ]));
+  }
+  box.appendChild(exportRow);
+
+  box.appendChild(el('button',{
+    class:'danger-link',
+    onclick: () => {
+      if(confirm('Reset all progress? This cannot be undone.')){
+        progress = {};
+        saveProgress();
+        settingsOpen = false;
+        render();
+      }
+    }
+  },[txt('Reset all progress')]));
+
+  box.appendChild(el('div',{style:'margin-top:16px; text-align:right;'},[
+    el('button',{class:'link-btn', onclick: () => { settingsOpen = false; render(); }},[txt('Close')])
+  ]));
+
+  overlay.appendChild(box);
+  const existingSettingsOverlay = container.querySelector('.settings-overlay');
+  if(existingSettingsOverlay) existingSettingsOverlay.remove();
+  container.appendChild(overlay);
+}
+
+function renderTranslator(container){
+  const panel = el('div',{class:'translate-panel'});
+
+  const inputRow = el('div',{class:'translate-input-row'});
+  const input = el('input',{
+    type:'text',
+    class:'translate-input',
+    placeholder:'Type an English or Darija word…',
+    value: translateQuery
+  });
+  input.addEventListener('input', (e) => {
+    translateQuery = e.target.value;
+    renderTranslateResults(resultsBox);
+  });
+  inputRow.appendChild(input);
+  panel.appendChild(inputRow);
+
+  const resultsBox = el('div',{class:'translate-results'});
+  panel.appendChild(resultsBox);
+  container.appendChild(panel);
+
+  renderTranslateResults(resultsBox);
+
+  // autofocus without scrolling the page
+  setTimeout(() => { input.focus({preventScroll:true}); }, 0);
+}
+
+function renderTranslateResults(resultsBox){
+  resultsBox.innerHTML = '';
+  const q = translateQuery.trim().toLowerCase();
+
+  if(!q){
+    resultsBox.appendChild(el('div',{class:'translate-hint'},[
+      txt('Start typing in either language — results update as you go.')
+    ]));
+    return;
+  }
+
+  const matches = WORDS.filter(w => {
+    return w.en.toLowerCase().includes(q) ||
+           w.lat.toLowerCase().includes(q) ||
+           w.ar.includes(translateQuery.trim());
+  }).slice(0, 30);
+
+  const sentenceMatches = WORDS.filter(w => {
+    if(!w.sentEn) return false;
+    return w.sentEn.toLowerCase().includes(q) ||
+           w.sentLat.toLowerCase().includes(q) ||
+           w.sentAr.includes(translateQuery.trim());
+  }).slice(0, 10);
+
+  if(matches.length === 0 && sentenceMatches.length === 0){
+    resultsBox.appendChild(el('div',{class:'translate-hint'},[
+      txt('No matches yet. Try a shorter word or check your spelling.')
+    ]));
+    return;
+  }
+
+  matches.forEach(w => {
+    const row = el('div',{class:'translate-row'});
+    const left = el('div',{class:'translate-en'},[txt(w.en)]);
+    const right = el('div',{class:'translate-darija'},[
+      el('div',{class:'translate-ar'},[txt(w.ar)]),
+      el('div',{class:'translate-lat'},[txt(w.lat)])
+    ]);
+    row.appendChild(left);
+    row.appendChild(right);
+    resultsBox.appendChild(row);
+  });
+
+  if(matches.length === 30){
+    resultsBox.appendChild(el('div',{class:'translate-hint'},[
+      txt('Showing first 30 word matches — keep typing to narrow it down.')
+    ]));
+  }
+
+  if(sentenceMatches.length > 0){
+    resultsBox.appendChild(el('div',{class:'translate-section-label'},[
+      txt('Sentences using this')
+    ]));
+    sentenceMatches.forEach(w => {
+      const card = el('div',{class:'sentence-search-card'});
+      card.appendChild(el('div',{class:'sentence-search-ar'},[txt(w.sentAr)]));
+      card.appendChild(el('div',{class:'sentence-search-lat'},[txt(w.sentLat)]));
+      card.appendChild(el('div',{class:'sentence-search-en'},[txt(w.sentEn)]));
+      resultsBox.appendChild(card);
+    });
+  }
+}
+
+function render(){
+  const app = document.getElementById('app');
+  app.innerHTML = '';
+
+  const topbar = el('div',{class:'topbar'});
+  const brandBlock = el('div',{});
+  const brandTitle = el('div',{
+    class:'brand',
+    onclick: triggerCatWalk
+  },[txt('For Kaoutar'), el('span',{class:'ar'},[txt('الدارجة')])]);
+  brandBlock.appendChild(brandTitle);
+  brandBlock.appendChild(el('div',{class:'tagline'},[txt('Spaced repetition for your 1,300-word Darija list')]));
+  topbar.appendChild(brandBlock);
+  topbar.appendChild(el('button',{class:'icon-btn', onclick: () => { settingsOpen = true; render(); }, title:'Settings'},[txt('⚙')]));
+  app.appendChild(topbar);
+
+  if(mode === 'translate'){
+    renderModeRow(app);
+    renderTranslator(app);
+  } else if(mode === 'sentences'){
+    renderModeRow(app);
+    renderSentencesSection(app);
+  } else if(!sessionActive){
+    renderStats(app);
+    renderModeRow(app);
+    renderIntroPanel(app);
+  } else {
+    if(sessionIdx >= session.length){
+      sessionActive = false;
+      renderStats(app);
+      renderModeRow(app);
+      const panel = el('div',{class:'panel'});
+      panel.appendChild(el('h2',{},[txt('Session complete')]));
+      panel.appendChild(el('p',{},[txt('Nice work. Your progress is saved — come back when more cards are due.')]));
+      panel.appendChild(el('button',{class:'big-btn', onclick: startSession},[txt('Study more')]));
+      app.appendChild(panel);
+    } else if(mode === 'flash'){
+      renderFlashcard(app);
+    } else if(mode === 'type'){
+      renderTypingMode(app);
+    } else {
+      renderQuiz(app);
+    }
+  }
+
+  renderSettingsOverlay(document.querySelector('.app-wrap'));
+
+  const existingSecret = document.querySelector('.secret-overlay');
+  if(existingSecret) existingSecret.remove();
+  if(secretOpen){
+    renderSecretScreen();
+  }
+}
+
+let pdfExportStatus = 'idle'; // idle | loading | error
+
+function buildPrintableHTML(){
+  const rows = WORDS.map(w => `
+    <tr>
+      <td class="pw-en">${escapeHtml(w.en)}</td>
+      <td class="pw-ar">${escapeHtml(w.ar)}</td>
+      <td class="pw-lat">${escapeHtml(w.lat)}</td>
+      <td class="pw-cat">${escapeHtml(CATEGORY_LABELS[w.cat] || w.cat)}</td>
+    </tr>`).join('');
+
+  return `<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>For Kaoutar — Darija Vocabulary Reference</title>
+<style>
+  @page { margin: 36px; }
+  body{
+    font-family: Georgia, 'Times New Roman', serif;
+    color: #2B2118;
+    margin: 0;
+    padding: 0;
+  }
+  h1{
+    font-size: 20px;
+    color: #8F4530;
+    margin: 0 0 4px;
+  }
+  .pw-meta{
+    font-size: 11px;
+    color: #6B5D4F;
+    margin-bottom: 18px;
+    font-family: Arial, sans-serif;
+  }
+  table{
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 11px;
+  }
+  thead th{
+    text-align: left;
+    font-family: Arial, sans-serif;
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    color: #6B5D4F;
+    border-bottom: 1.5px solid #B85C3E;
+    padding: 6px 8px;
+  }
+  tbody td{
+    padding: 5px 8px;
+    border-bottom: 0.5px solid #E5DCCB;
+    vertical-align: top;
+  }
+  .pw-en{ font-weight: bold; width: 22%; }
+  .pw-ar{ direction: rtl; font-family: 'Geeza Pro', 'Damascus', 'Noto Naskh Arabic', serif; font-size: 13px; width: 26%; }
+  .pw-lat{ color: #6B5D4F; font-style: italic; width: 26%; }
+  .pw-cat{ color: #998A78; font-size: 10px; width: 26%; }
+  tbody tr:nth-child(8n+1), tbody tr:nth-child(8n+2), tbody tr:nth-child(8n+3), tbody tr:nth-child(8n+4){
+    background: #FAF6EF;
+  }
+  @media print{
+    .pw-noprint{ display: none; }
+  }
+  .pw-noprint{
+    background: #B85C3E;
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    padding: 10px 18px;
+    font-family: Arial, sans-serif;
+    font-size: 13px;
+    cursor: pointer;
+    margin-bottom: 18px;
+  }
+</style>
+</head>
+<body>
+<button class="pw-noprint" onclick="window.print()">Print / Save as PDF</button>
+<h1>For Kaoutar — Darija Vocabulary Reference</h1>
+<div class="pw-meta">${WORDS.length} words · generated ${new Date().toLocaleDateString()}</div>
+<table>
+  <thead>
+    <tr><th>English</th><th>Darija (Arabic)</th><th>Pronunciation</th><th>Category</th></tr>
+  </thead>
+  <tbody>${rows}</tbody>
+</table>
+</body>
+</html>`;
+}
+
+function escapeHtml(s){
+  const div = document.createElement('div');
+  div.textContent = s == null ? '' : String(s);
+  return div.innerHTML;
+}
+
+function exportDatasetToPDF(){
+  if(pdfExportStatus === 'loading') return;
+  pdfExportStatus = 'loading';
+  render();
+
+  try{
+    const html = buildPrintableHTML();
+    const printWindow = window.open('', '_blank');
+    if(!printWindow){
+      pdfExportStatus = 'error';
+      render();
+      return;
+    }
+    printWindow.document.open();
+    printWindow.document.write(html);
+    printWindow.document.close();
+    printWindow.onload = () => {
+      setTimeout(() => { printWindow.focus(); printWindow.print(); }, 300);
+    };
+    pdfExportStatus = 'idle';
+    render();
+  }catch(err){
+    console.error('PDF export failed', err);
+    pdfExportStatus = 'error';
+    render();
+  }
+}
+
+async function init(){
+  try{
+    await loadState();
+    render();
+  }catch(err){
+    const app = document.getElementById('app');
+    if(app){
+      app.innerHTML = '<div style="padding:40px 20px; text-align:center; font-family:sans-serif; color:#6B5D4F;">' +
+        '<p style="font-size:16px; margin-bottom:8px;">Something did not load correctly.</p>' +
+        '<p style="font-size:13px;">' + (err && err.message ? err.message : 'Unknown error') + '</p>' +
+        '</div>';
+    }
+    console.error('init failed', err);
+  }
+}
+window.addEventListener('error', function(e){
+  const app = document.getElementById('app');
+  if(app && !app.innerHTML.trim()){
+    app.innerHTML = '<div style="padding:40px 20px; text-align:center; font-family:sans-serif; color:#6B5D4F;">' +
+      '<p style="font-size:16px;">Something went wrong loading the app.</p>' +
+      '<p style="font-size:13px; margin-top:8px;">' + (e.message || '') + '</p>' +
+      '</div>';
+  }
+});
+init();
+</script>
+</body>
+</html>
